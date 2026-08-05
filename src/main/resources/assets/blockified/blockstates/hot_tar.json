@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "blockified:block/hot_tar"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "parent": "item/handheld",
+  "textures": {
+    "layer0": "blockified:item/sword_of_experience"
+  }
+}
