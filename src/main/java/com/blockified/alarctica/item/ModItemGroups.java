@@ -1,0 +1,33 @@
+package com.blockified.alarctica.item;
+
+import com.blockified.Blockified;
+import com.blockified.alarctica.block.ModBlocks;
+import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
+import net.minecraft.item.ItemGroup;
+import net.minecraft.item.ItemStack;
+import net.minecraft.registry.Registries;
+import net.minecraft.registry.Registry;
+import net.minecraft.text.Text;
+import net.minecraft.util.Identifier;
+
+public class ModItemGroups {
+	public static final ItemGroup BLOCKIFIED_GROUP = Registry.register(Registries.ITEM_GROUP,
+			new Identifier(Blockified.MOD_ID, "blockified"),
+			FabricItemGroup.builder()
+					.icon(() -> new ItemStack(ModItems.TarIngot))
+					.displayName(Text.translatable("itemgroup.blockified"))
+					.entries((context, entries) -> {
+						/*Ingots\/*/
+						entries.add(ModItems.TarIngot);
+						/*Blocks\/*/
+						entries.add(ModBlocks.HotTar);
+						entries.add(ModBlocks.ResistantPackedIce);
+						/*Tools & Weapons \/*/
+						entries.add(ModItems.SwordOfExperience);
+						entries.add(ModItems.AxeOfExperience);
+					})
+					.build());
+
+	public static void registerModItemGroups() {
+	}
+}
