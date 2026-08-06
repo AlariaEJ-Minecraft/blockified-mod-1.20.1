@@ -1,0 +1,8 @@
+{
+  "type": "minecraft:stonecutting",
+  "ingredient": {
+    "item": "blockified:hot_tar"
+  },
+  "result": "blockified:tarched_coal",
+  "count": 10
+}

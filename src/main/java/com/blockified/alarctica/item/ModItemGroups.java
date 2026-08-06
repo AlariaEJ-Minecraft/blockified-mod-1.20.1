@@ -19,6 +19,7 @@ public class ModItemGroups {
 					.entries((context, entries) -> {
 						/*Ingots\/*/
 						entries.add(ModItems.TarIngot);
+						entries.add(ModItems.TarchedCoal);
 						/*Blocks\/*/
 						entries.add(ModBlocks.HotTar);
 						entries.add(ModBlocks.BlackIce);
