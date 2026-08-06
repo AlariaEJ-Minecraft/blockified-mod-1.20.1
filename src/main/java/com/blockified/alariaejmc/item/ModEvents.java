@@ -1,6 +1,7 @@
 package com.blockified.alariaejmc.item;
 
 import com.blockified.alariaejmc.block.ModBlocks;
+import com.blockified.alariaejmc.effect.ModEffects;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
@@ -10,6 +11,7 @@ import net.minecraft.entity.EquipmentSlot;
 import net.minecraft.entity.LivingEntity;
 import net.minecraft.entity.effect.StatusEffectInstance;
 import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.mob.PhantomEntity;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
@@ -60,10 +62,31 @@ public class ModEvents {
 			}
 		});
 
+		/*Magnetite Helmet: grants Phantom Protection while worn, which
+		  cancels phantom attacks outright below.*/
+		ServerTickEvents.END_SERVER_TICK.register(server -> {
+			for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+				boolean wearingHelmet = player.getEquippedStack(EquipmentSlot.HEAD).getItem() == ModItems.MagnetiteHelmet;
+				if (wearingHelmet) {
+					StatusEffectInstance current = player.getStatusEffect(ModEffects.PhantomProtection);
+					if (current == null || current.getDuration() < 20) {
+						player.addStatusEffect(new StatusEffectInstance(ModEffects.PhantomProtection, 220, 0, true, false));
+					}
+				} else if (player.hasStatusEffect(ModEffects.PhantomProtection)) {
+					player.removeStatusEffect(ModEffects.PhantomProtection);
+				}
+			}
+		});
+
 		ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
 			if (entity instanceof PlayerEntity player
 					&& isWearingFullTarchedSet(player)
 					&& source.isIn(DamageTypeTags.IS_EXPLOSION)) {
+				return false;
+			}
+			if (entity instanceof PlayerEntity player
+					&& source.getAttacker() instanceof PhantomEntity
+					&& player.hasStatusEffect(ModEffects.PhantomProtection)) {
 				return false;
 			}
 			return true;

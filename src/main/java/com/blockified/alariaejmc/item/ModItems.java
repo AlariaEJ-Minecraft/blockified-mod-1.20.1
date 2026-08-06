@@ -57,8 +57,9 @@ public class ModItems {
 	public static final Item EmptyOobleckBucket = registerItem("empty_bucket_of_oobleck",
 			new EmptyOobleckBucketItem(new FabricItemSettings().maxCount(16)));
 
-	/*Magnetite: iron-tier. Helmet only for now - no magnetism behavior
-	  yet, plain armor piece using vanilla iron stats.*/
+	/*Magnetite: iron-tier armor stats. Helmet grants Phantom Protection
+	  while worn - see ModEvents for the effect upkeep/removal and the
+	  phantom-attack cancellation.*/
 	public static final Item RawMagnetite = registerItem("raw_magnetite",
 			new Item(new FabricItemSettings()));
 

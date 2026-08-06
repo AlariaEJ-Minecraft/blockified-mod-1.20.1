@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "A A"
+  ],
+  "key": {
+    "A": {
+      "item": "blockified:magnetite_ingot"
+    }
+  },
+  "result": {
+    "item": "blockified:magnetite_helmet",
+    "count": 1
+  }
+}

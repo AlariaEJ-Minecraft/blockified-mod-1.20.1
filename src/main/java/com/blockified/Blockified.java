@@ -2,6 +2,7 @@ package com.blockified;
 
 import com.blockified.alariaejmc.block.ModBlocks;
 import com.blockified.alariaejmc.block.ModMagnetarTicker;
+import com.blockified.alariaejmc.effect.ModEffects;
 import com.blockified.alariaejmc.item.ModEvents;
 import com.blockified.alariaejmc.item.ModItemGroups;
 import com.blockified.alariaejmc.item.ModItems;
@@ -14,6 +15,7 @@ public class Blockified implements ModInitializer {
 	@Override
 	public void onInitialize() {
 		ModBlocks.registerModBlocks();
+		ModEffects.registerModEffects();
 		ModItems.registerModItems();
 		ModItemGroups.registerModItemGroups();
 		ModEvents.registerEvents();
