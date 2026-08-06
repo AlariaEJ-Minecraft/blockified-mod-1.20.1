@@ -4,6 +4,7 @@ import com.blockified.Blockified;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
+import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -19,6 +20,12 @@ public class ModItems {
 
 	public static final Item AxeOfExperience = registerItem("axe_of_experience",
 			new ExperienceAxeItem(ModToolMaterial.AxeOfExperience, 14, 1f, new FabricItemSettings(), 5, 10));
+
+	/*Damage 17; swing speed -2.0 (heavier/slower than a vanilla diamond
+	  sword's -2.4, fitting obsidian's weight); Netherite-tier material
+	  since no durability/mining stats were specified.*/
+	public static final Item CryingObsidianSword = registerItem("crying_obsidian_sword",
+			new CryingObsidianSwordItem(ToolMaterials.NETHERITE, 17, -2.0f, new FabricItemSettings()));
 
 	public static final Item TarchedPickaxe = registerItem("tarched_pickaxe",
 			new SmeltingPickaxeItem(ModToolMaterial.Tarched, 1, -2.8f, new FabricItemSettings()));
