@@ -7,20 +7,24 @@ import net.minecraft.sound.SoundEvent;
 import net.minecraft.sound.SoundEvents;
 
 public class ModArmorMaterial {
+	/*Positioned between Diamond (helmet 363 / chest 528 / legs 495 / boots 429
+	  durability, toughness 2.0, kb resist 0.0, ench 10) and Netherite (407 /
+	  592 / 555 / 481, toughness 3.0, kb resist 0.1, ench 15). Protection is
+	  identical between those two tiers (3/8/6/3), so it stays there.*/
 	public static final ArmorMaterial Tarched = new ArmorMaterial() {
 		@Override
 		public int getDurability(ArmorItem.Type type) {
 			switch (type) {
 				case HELMET:
-					return 220;
+					return 385;
 				case CHESTPLATE:
-					return 320;
+					return 560;
 				case LEGGINGS:
-					return 300;
+					return 525;
 				case BOOTS:
-					return 260;
+					return 455;
 				default:
-					return 220;
+					return 385;
 			}
 		}
 
@@ -28,13 +32,13 @@ public class ModArmorMaterial {
 		public int getProtection(ArmorItem.Type type) {
 			switch (type) {
 				case HELMET:
-					return 2;
+					return 3;
 				case CHESTPLATE:
-					return 7;
+					return 8;
 				case LEGGINGS:
-					return 5;
+					return 6;
 				case BOOTS:
-					return 2;
+					return 3;
 				default:
 					return 0;
 			}
@@ -42,12 +46,12 @@ public class ModArmorMaterial {
 
 		@Override
 		public int getEnchantability() {
-			return 12;
+			return 13;
 		}
 
 		@Override
 		public SoundEvent getEquipSound() {
-			return SoundEvents.ITEM_ARMOR_EQUIP_IRON;
+			return SoundEvents.ITEM_ARMOR_EQUIP_NETHERITE;
 		}
 
 		@Override
@@ -62,12 +66,12 @@ public class ModArmorMaterial {
 
 		@Override
 		public float getToughness() {
-			return 1.0f;
+			return 2.5f;
 		}
 
 		@Override
 		public float getKnockbackResistance() {
-			return 0.0f;
+			return 0.05f;
 		}
 	};
 }

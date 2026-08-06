@@ -1,13 +1,22 @@
 package com.blockified.alarctica.item;
 
 import com.blockified.alarctica.block.ModBlocks;
+import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
+import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;
 import net.fabricmc.fabric.api.registry.FuelRegistry;
 import net.minecraft.block.Block;
+import net.minecraft.entity.EquipmentSlot;
+import net.minecraft.entity.LivingEntity;
+import net.minecraft.entity.effect.StatusEffectInstance;
+import net.minecraft.entity.effect.StatusEffects;
+import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.inventory.SimpleInventory;
 import net.minecraft.item.ItemStack;
 import net.minecraft.recipe.RecipeType;
 import net.minecraft.recipe.SmeltingRecipe;
+import net.minecraft.registry.tag.DamageTypeTags;
+import net.minecraft.server.network.ServerPlayerEntity;
 
 import java.util.Optional;
 
@@ -37,5 +46,34 @@ public class ModEvents {
 			held.damage(1, player, p -> p.sendToolBreakStatus(player.getActiveHand()));
 			return false;
 		});
+
+		/*Full Tarched Armor Set bonus: fire resistance + explosion immunity.*/
+		ServerTickEvents.END_SERVER_TICK.register(server -> {
+			for (ServerPlayerEntity player : server.getPlayerManager().getPlayerList()) {
+				if (!isWearingFullTarchedSet(player)) {
+					continue;
+				}
+				StatusEffectInstance current = player.getStatusEffect(StatusEffects.FIRE_RESISTANCE);
+				if (current == null || current.getDuration() < 20) {
+					player.addStatusEffect(new StatusEffectInstance(StatusEffects.FIRE_RESISTANCE, 220, 0, true, false));
+				}
+			}
+		});
+
+		ServerLivingEntityEvents.ALLOW_DAMAGE.register((entity, source, amount) -> {
+			if (entity instanceof PlayerEntity player
+					&& isWearingFullTarchedSet(player)
+					&& source.isIn(DamageTypeTags.IS_EXPLOSION)) {
+				return false;
+			}
+			return true;
+		});
+	}
+
+	private static boolean isWearingFullTarchedSet(LivingEntity entity) {
+		return entity.getEquippedStack(EquipmentSlot.HEAD).getItem() == ModItems.TarchedHelmet
+				&& entity.getEquippedStack(EquipmentSlot.CHEST).getItem() == ModItems.TarchedChestplate
+				&& entity.getEquippedStack(EquipmentSlot.LEGS).getItem() == ModItems.TarchedLeggings
+				&& entity.getEquippedStack(EquipmentSlot.FEET).getItem() == ModItems.TarchedBoots;
 	}
 }
