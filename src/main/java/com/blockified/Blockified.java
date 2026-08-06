@@ -6,6 +6,7 @@ import com.blockified.alariaejmc.effect.ModEffects;
 import com.blockified.alariaejmc.item.ModEvents;
 import com.blockified.alariaejmc.item.ModItemGroups;
 import com.blockified.alariaejmc.item.ModItems;
+import com.blockified.alariaejmc.item.ModMagnetiteCompassTicker;
 import com.blockified.alariaejmc.world.ModWorldGen;
 import com.blockified.alariaejmc.world.feature.ModFeatures;
 import net.fabricmc.api.ModInitializer;
@@ -23,5 +24,6 @@ public class Blockified implements ModInitializer {
 		ModFeatures.registerModFeatures();
 		ModWorldGen.registerWorldGen();
 		ModMagnetarTicker.registerTicking();
+		ModMagnetiteCompassTicker.registerTicking();
 	}
 }

@@ -48,6 +48,7 @@ public class ModItemGroups {
 						entries.add(ModItems.TarchedLeggings);
 						entries.add(ModItems.TarchedBoots);
 						entries.add(ModItems.MagnetiteHelmet);
+						entries.add(ModItems.MagnetiteCompass);
 					})
 					.build());
 

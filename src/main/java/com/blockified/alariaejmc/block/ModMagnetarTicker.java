@@ -7,6 +7,7 @@ import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.GlobalPos;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -47,6 +48,12 @@ public class ModMagnetarTicker {
 			poweringUp.remove(gp);
 			active.remove(gp);
 		}
+	}
+
+	/*Read-only view for ModMagnetiteCompassTicker, which needs to find the
+	  nearest ON Magnetar to point a held compass at.*/
+	public static Set<GlobalPos> getActiveMagnetars() {
+		return Collections.unmodifiableSet(active);
 	}
 
 	private static GlobalPos toGlobalPos(net.minecraft.world.World world, BlockPos pos) {

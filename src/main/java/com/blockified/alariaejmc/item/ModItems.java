@@ -4,6 +4,7 @@ import com.blockified.Blockified;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.ArmorMaterials;
+import net.minecraft.item.CompassItem;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.Registries;
@@ -68,6 +69,13 @@ public class ModItems {
 
 	public static final Item MagnetiteHelmet = registerItem("magnetite_helmet",
 			new ArmorItem(ArmorMaterials.IRON, ArmorItem.Type.HELMET, new FabricItemSettings()));
+
+	/*Plain vanilla CompassItem so the client's existing lodestone-style
+	  needle rendering/NBT contract works with zero custom code - see
+	  ModMagnetiteCompassTicker, which keeps re-pointing it at the
+	  nearest currently-ON Magnetar.*/
+	public static final Item MagnetiteCompass = registerItem("magnetite_compass",
+			new CompassItem(new FabricItemSettings()));
 
 	/**//**//**//**//**/
 	private static Item registerItem(String name, Item item) {
