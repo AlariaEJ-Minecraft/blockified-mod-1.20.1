@@ -29,6 +29,7 @@ public class ModItemGroups {
 						/*Tools & Weapons \/*/
 						entries.add(ModItems.SwordOfExperience);
 						entries.add(ModItems.AxeOfExperience);
+						entries.add(ModItems.TarchedPickaxe);
 						entries.add(ModItems.IceTotemOfResistance);
 						/*Armor\/*/
 						entries.add(ModItems.TarchedHelmet);
