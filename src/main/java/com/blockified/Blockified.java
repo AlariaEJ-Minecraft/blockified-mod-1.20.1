@@ -1,6 +1,7 @@
 package com.blockified;
 
 import com.blockified.alariaejmc.block.ModBlocks;
+import com.blockified.alariaejmc.block.ModMagnetarTicker;
 import com.blockified.alariaejmc.item.ModEvents;
 import com.blockified.alariaejmc.item.ModItemGroups;
 import com.blockified.alariaejmc.item.ModItems;
@@ -17,5 +18,6 @@ public class Blockified implements ModInitializer {
 		ModItemGroups.registerModItemGroups();
 		ModEvents.registerEvents();
 		ModWorldGen.registerWorldGen();
+		ModMagnetarTicker.registerTicking();
 	}
 }

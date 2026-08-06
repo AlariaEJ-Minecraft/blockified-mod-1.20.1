@@ -1,0 +1,12 @@
+{
+  "parent": "block/cube",
+  "textures": {
+    "particle": "blockified:block/magnetar_front_on",
+    "north": "blockified:block/magnetar_front_on",
+    "south": "blockified:block/magnetar_back",
+    "east": "blockified:block/magnetar_side",
+    "west": "blockified:block/magnetar_side",
+    "up": "blockified:block/magnetar_top_bottom",
+    "down": "blockified:block/magnetar_top_bottom"
+  }
+}

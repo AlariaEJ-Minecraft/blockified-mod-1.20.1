@@ -1,0 +1,13 @@
+{
+  "variants": {
+    "magnetar_state=off": {
+      "model": "blockified:block/magnetar_off"
+    },
+    "magnetar_state=powering_up": {
+      "model": "blockified:block/magnetar_powering_up"
+    },
+    "magnetar_state=on": {
+      "model": "blockified:block/magnetar_on"
+    }
+  }
+}

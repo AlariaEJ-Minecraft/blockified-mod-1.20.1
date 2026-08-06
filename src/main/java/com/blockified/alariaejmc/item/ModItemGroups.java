@@ -35,6 +35,7 @@ public class ModItemGroups {
 						entries.add(ModBlocks.ClayBog);
 						entries.add(ModBlocks.BogBlock);
 						entries.add(ModBlocks.MudBog);
+						entries.add(ModBlocks.Magnetar);
 						/*Tools & Weapons \/*/
 						entries.add(ModItems.SwordOfExperience);
 						entries.add(ModItems.AxeOfExperience);

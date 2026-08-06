@@ -50,6 +50,12 @@ public class ModBlocks {
 	public static final Block MagnetiteOreBlock = registerBlock("magnetite_ore_block",
 			new Block(FabricBlockSettings.copyOf(Blocks.IRON_ORE)));
 
+	/*Redstone: off/powering_up/on, toggled by any redstone signal (lever,
+	  wire, etc.). See MagnetarBlock/ModMagnetarTicker for the radius
+	  wireless-power behavior.*/
+	public static final Block Magnetar = registerBlock("magnetar",
+			new MagnetarBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
+
 	/*-----------*/
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);
