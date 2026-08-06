@@ -31,6 +31,10 @@
               "name": "blockified:raw_magnetite",
               "functions": [
                 {
+                  "function": "minecraft:set_count",
+                  "count": 3
+                },
+                {
                   "function": "minecraft:apply_bonus",
                   "enchantment": "minecraft:fortune",
                   "formula": "minecraft:ore_drops"

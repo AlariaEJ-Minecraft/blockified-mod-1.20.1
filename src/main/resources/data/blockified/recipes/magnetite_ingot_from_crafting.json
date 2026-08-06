@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "blockified:raw_magnetite"
+    }
+  },
+  "result": {
+    "item": "blockified:magnetite_ingot",
+    "count": 1
+  }
+}
