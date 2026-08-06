@@ -1,0 +1,7 @@
+{
+  "variants": {
+    "": {
+      "model": "blockified:block/magnetite_ore_block"
+    }
+  }
+}

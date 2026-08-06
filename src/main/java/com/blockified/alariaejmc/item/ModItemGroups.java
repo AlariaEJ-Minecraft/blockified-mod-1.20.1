@@ -20,8 +20,11 @@ public class ModItemGroups {
 						/*Ingots\/*/
 						entries.add(ModItems.TarIngot);
 						entries.add(ModItems.TarchedCoal);
+						entries.add(ModItems.RawMagnetite);
+						entries.add(ModItems.MagnetiteIngot);
 						/*Blocks\/*/
 						entries.add(ModBlocks.HotTar);
+						entries.add(ModBlocks.MagnetiteOreBlock);
 						entries.add(ModBlocks.BlackIce);
 						entries.add(ModBlocks.CondensedIce);
 						entries.add(ModBlocks.ColdIce);
@@ -43,6 +46,7 @@ public class ModItemGroups {
 						entries.add(ModItems.TarchedChestplate);
 						entries.add(ModItems.TarchedLeggings);
 						entries.add(ModItems.TarchedBoots);
+						entries.add(ModItems.MagnetiteHelmet);
 					})
 					.build());
 

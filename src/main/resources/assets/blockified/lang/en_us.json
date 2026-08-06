@@ -12,6 +12,9 @@
   "item.blockified.tarched_boots": "Tarched Boots",
   "item.blockified.bucket_of_oobleck": "Bucket of Oobleck",
   "item.blockified.empty_bucket_of_oobleck": "Empty Oobleck Bucket",
+  "item.blockified.raw_magnetite": "Raw Magnetite",
+  "item.blockified.magnetite_ingot": "Magnetite Ingot",
+  "item.blockified.magnetite_helmet": "Magnetite Helmet",
 
   "block.blockified.hot_tar": "Hot Tar",
   "block.blockified.black_ice": "Black Ice",
@@ -22,6 +25,7 @@
   "block.blockified.clay_bog": "Clay Bog",
   "block.blockified.bog_block": "Bog Block",
   "block.blockified.mud_bog": "Mud Bog",
+  "block.blockified.magnetite_ore_block": "Magnetite Ore",
 
   "death.attack.mud_bog_drown": "%1$s has sunk and drowned to a Mud Bog Marsh",
 

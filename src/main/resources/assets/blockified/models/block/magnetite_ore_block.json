@@ -1,0 +1,6 @@
+{
+  "parent": "block/cube_all",
+  "textures": {
+    "all": "blockified:block/magnetite_ore_block"
+  }
+}

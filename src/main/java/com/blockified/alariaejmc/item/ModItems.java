@@ -3,6 +3,7 @@ package com.blockified.alariaejmc.item;
 import com.blockified.Blockified;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.ArmorItem;
+import net.minecraft.item.ArmorMaterials;
 import net.minecraft.item.Item;
 import net.minecraft.item.ToolMaterials;
 import net.minecraft.registry.Registries;
@@ -55,6 +56,17 @@ public class ModItems {
 
 	public static final Item EmptyOobleckBucket = registerItem("empty_bucket_of_oobleck",
 			new EmptyOobleckBucketItem(new FabricItemSettings().maxCount(16)));
+
+	/*Magnetite: iron-tier. Helmet only for now - no magnetism behavior
+	  yet, plain armor piece using vanilla iron stats.*/
+	public static final Item RawMagnetite = registerItem("raw_magnetite",
+			new Item(new FabricItemSettings()));
+
+	public static final Item MagnetiteIngot = registerItem("magnetite_ingot",
+			new Item(new FabricItemSettings()));
+
+	public static final Item MagnetiteHelmet = registerItem("magnetite_helmet",
+			new ArmorItem(ArmorMaterials.IRON, ArmorItem.Type.HELMET, new FabricItemSettings()));
 
 	/**//**//**//**//**/
 	private static Item registerItem(String name, Item item) {

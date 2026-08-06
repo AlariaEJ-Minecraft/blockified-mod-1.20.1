@@ -45,6 +45,11 @@ public class ModBlocks {
 	public static final Block MudBog = registerBlock("mud_bog",
 			new MudBogBlock(FabricBlockSettings.copyOf(Blocks.POWDER_SNOW)));
 
+	/*Iron-tier ore; drops Raw Magnetite (see loot table), smeltable into
+	  Magnetite Ingot. No world generation placement yet.*/
+	public static final Block MagnetiteOreBlock = registerBlock("magnetite_ore_block",
+			new Block(FabricBlockSettings.copyOf(Blocks.IRON_ORE)));
+
 	/*-----------*/
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);
