@@ -12,7 +12,8 @@ import net.minecraft.util.math.BlockPos;
 import net.minecraft.world.World;
 
 /**
- * Places a solid Oobleck block, Powder-Snow-bucket style (no fluid physics).
+ * Places a full-depth (LEVEL 6) Oobleck block, Powder-Snow-bucket style
+ * (no fluid physics). See OobleckBlock for the quicksand behavior.
  */
 public class BucketOfOobleckItem extends Item {
 	public BucketOfOobleckItem(Settings settings) {

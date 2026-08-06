@@ -1,7 +1,22 @@
 {
   "variants": {
-    "": {
-      "model": "blockified:block/oobleck"
+    "level=1": {
+      "model": "blockified:block/oobleck_level1"
+    },
+    "level=2": {
+      "model": "blockified:block/oobleck_level2"
+    },
+    "level=3": {
+      "model": "blockified:block/oobleck_level3"
+    },
+    "level=4": {
+      "model": "blockified:block/oobleck_level4"
+    },
+    "level=5": {
+      "model": "blockified:block/oobleck_level5"
+    },
+    "level=6": {
+      "model": "blockified:block/oobleck_level6"
     }
   }
 }

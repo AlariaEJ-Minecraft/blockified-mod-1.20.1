@@ -12,8 +12,11 @@ import net.minecraft.world.gen.feature.PlacedFeature;
 
 /**
  * Hot Tar ore vein: overworld stone biomes, Y 15-20. Mud Bog patches:
- * Lush Caves / Mushroom Fields - adjust the biome list here to change
- * where they spawn. Both match the configured/placed feature JSON under
+ * Lush Caves / Mushroom Fields. Oobleck strips: Desert biomes, but the
+ * feature itself (OobleckStripFeature) aborts unless it lands on sand
+ * near open water, so they only actually show up along desert riverbanks.
+ * Adjust the biome lists here to change where any of these spawn - all
+ * three match the configured/placed feature JSON under
  * data/blockified/worldgen/.
  */
 public class ModWorldGen {
@@ -30,5 +33,12 @@ public class ModWorldGen {
 		BiomeModifications.addFeature(
 				BiomeSelectors.includeByKey(BiomeKeys.LUSH_CAVES, BiomeKeys.MUSHROOM_FIELDS),
 				GenerationStep.Feature.VEGETAL_DECORATION, mudBogPatch);
+
+		RegistryKey<PlacedFeature> oobleckStrip = RegistryKey.of(RegistryKeys.PLACED_FEATURE,
+				new Identifier(Blockified.MOD_ID, "oobleck_strip"));
+
+		BiomeModifications.addFeature(
+				BiomeSelectors.includeByKey(BiomeKeys.DESERT),
+				GenerationStep.Feature.VEGETAL_DECORATION, oobleckStrip);
 	}
 }

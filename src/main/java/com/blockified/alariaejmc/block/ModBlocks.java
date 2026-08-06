@@ -30,9 +30,11 @@ public class ModBlocks {
 	public static final Block HardDenseIce = registerBlock("hard_dense_ice",
 			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE).slipperiness(0.994f), 0.028));
 
-	/*Placed/picked up via bucket; no fluid physics.*/
+	/*Placed/picked up via bucket (always LEVEL 6); also generates as
+	  variable-depth (LEVEL 1-6) desert riverbank strips - see
+	  OobleckStripFeature. Quicksand behavior lives in OobleckBlock.*/
 	public static final Block Oobleck = registerBlock("oobleck",
-			new Block(FabricBlockSettings.copyOf(Blocks.MUD)));
+			new OobleckBlock(FabricBlockSettings.copyOf(Blocks.MUD)));
 
 	/*Soul Sand inspired bog trio; shovel is the effective tool
 	  (see data/minecraft/tags/blocks/mineable/shovel.json).*/

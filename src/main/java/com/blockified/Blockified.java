@@ -7,6 +7,7 @@ import com.blockified.alariaejmc.item.ModEvents;
 import com.blockified.alariaejmc.item.ModItemGroups;
 import com.blockified.alariaejmc.item.ModItems;
 import com.blockified.alariaejmc.world.ModWorldGen;
+import com.blockified.alariaejmc.world.feature.ModFeatures;
 import net.fabricmc.api.ModInitializer;
 
 public class Blockified implements ModInitializer {
@@ -19,6 +20,7 @@ public class Blockified implements ModInitializer {
 		ModItems.registerModItems();
 		ModItemGroups.registerModItemGroups();
 		ModEvents.registerEvents();
+		ModFeatures.registerModFeatures();
 		ModWorldGen.registerWorldGen();
 		ModMagnetarTicker.registerTicking();
 	}
