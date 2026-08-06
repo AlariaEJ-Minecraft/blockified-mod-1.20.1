@@ -19,6 +19,20 @@ public class ModBlocks {
 	public static final Block ResistantPackedIce = registerBlock("resistant_packed_ice",
 			new Block(FabricBlockSettings.copyOf(Blocks.PACKED_ICE).resistance(1200f)));
 
+	/*Ice variants: slipperiness and standstill push both rank
+	  Hard Dense Ice > Cold Ice > Condensed Ice > Black Ice*/
+	public static final Block BlackIce = registerBlock("black_ice",
+			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE).slipperiness(0.96f), 0.0));
+
+	public static final Block CondensedIce = registerBlock("condensed_ice",
+			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE).slipperiness(0.975f), 0.008));
+
+	public static final Block ColdIce = registerBlock("cold_ice",
+			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE).slipperiness(0.985f), 0.016));
+
+	public static final Block HardDenseIce = registerBlock("hard_dense_ice",
+			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE).slipperiness(0.994f), 0.028));
+
 	/*-----------*/
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);

@@ -22,6 +22,10 @@ public class ModItemGroups {
 						/*Blocks\/*/
 						entries.add(ModBlocks.HotTar);
 						entries.add(ModBlocks.ResistantPackedIce);
+						entries.add(ModBlocks.BlackIce);
+						entries.add(ModBlocks.CondensedIce);
+						entries.add(ModBlocks.ColdIce);
+						entries.add(ModBlocks.HardDenseIce);
 						/*Tools & Weapons \/*/
 						entries.add(ModItems.SwordOfExperience);
 						entries.add(ModItems.AxeOfExperience);

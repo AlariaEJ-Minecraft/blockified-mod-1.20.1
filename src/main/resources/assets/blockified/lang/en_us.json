@@ -5,6 +5,10 @@
 
   "block.blockified.hot_tar": "Hot Tar",
   "block.blockified.resistant_packed_ice": "Resistant Packed Ice",
+  "block.blockified.black_ice": "Black Ice",
+  "block.blockified.condensed_ice": "Condensed Ice",
+  "block.blockified.cold_ice": "Cold Ice",
+  "block.blockified.hard_dense_ice": "Hard Dense Ice",
 
   "itemgroup.blockified": "Blockified! By Alarctica"
 }
