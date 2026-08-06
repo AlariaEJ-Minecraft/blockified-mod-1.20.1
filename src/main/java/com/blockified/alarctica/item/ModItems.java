@@ -14,11 +14,13 @@ public class ModItems {
 
 	/**//**//**//**//**/
 	/*Sword/Tools/Combat*/
+	/*Base damage relative to vanilla diamond: sword +3 (diamond's own
+	  constructor param is 3, so 3+3=6), axe +5 (diamond's is 5, so 5+5=10).*/
 	public static final Item SwordOfExperience = registerItem("sword_of_experience",
-			new ExperienceSwordItem(ModToolMaterial.SwordOfExperience, 11, 1f, new FabricItemSettings(), 10, 15));
+			new ExperienceSwordItem(ModToolMaterial.SwordOfExperience, 6, 1f, new FabricItemSettings(), 10, 15));
 
 	public static final Item AxeOfExperience = registerItem("axe_of_experience",
-			new ExperienceAxeItem(ModToolMaterial.AxeOfExperience, 12, 1f, new FabricItemSettings(), 5, 10));
+			new ExperienceAxeItem(ModToolMaterial.AxeOfExperience, 10, 1f, new FabricItemSettings(), 5, 10));
 
 	public static final Item TarchedPickaxe = registerItem("tarched_pickaxe",
 			new SmeltingPickaxeItem(ModToolMaterial.Tarched, 1, -2.8f, new FabricItemSettings()));
