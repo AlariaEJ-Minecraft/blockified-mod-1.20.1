@@ -30,6 +30,11 @@ public class ModItemGroups {
 						entries.add(ModItems.SwordOfExperience);
 						entries.add(ModItems.AxeOfExperience);
 						entries.add(ModItems.IceTotemOfResistance);
+						/*Armor\/*/
+						entries.add(ModItems.TarchedHelmet);
+						entries.add(ModItems.TarchedChestplate);
+						entries.add(ModItems.TarchedLeggings);
+						entries.add(ModItems.TarchedBoots);
 					})
 					.build());
 
