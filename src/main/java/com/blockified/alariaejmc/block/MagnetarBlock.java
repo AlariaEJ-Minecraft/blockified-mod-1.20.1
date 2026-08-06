@@ -2,8 +2,11 @@ package com.blockified.alariaejmc.block;
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
+import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
+import net.minecraft.state.property.DirectionProperty;
 import net.minecraft.state.property.EnumProperty;
+import net.minecraft.state.property.Properties;
 import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
@@ -40,15 +43,21 @@ public class MagnetarBlock extends Block {
 	}
 
 	public static final EnumProperty<MagnetarState> STATE = EnumProperty.of("magnetar_state", MagnetarState.class);
+	public static final DirectionProperty FACING = Properties.FACING;
 
 	public MagnetarBlock(Settings settings) {
 		super(settings);
-		setDefaultState(getStateManager().getDefaultState().with(STATE, MagnetarState.OFF));
+		setDefaultState(getStateManager().getDefaultState().with(STATE, MagnetarState.OFF).with(FACING, Direction.NORTH));
 	}
 
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(STATE);
+		builder.add(STATE, FACING);
+	}
+
+	@Override
+	public BlockState getPlacementState(ItemPlacementContext ctx) {
+		return getDefaultState().with(FACING, ctx.getPlayerLookDirection().getOpposite());
 	}
 
 	@Override
