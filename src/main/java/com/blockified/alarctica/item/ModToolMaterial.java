@@ -69,30 +69,32 @@ public class ModToolMaterial {
 		}
 	};
 
+	/*Positioned between Diamond (1561 dur / 8.0 speed / +3 dmg / level 3 / ench 10)
+	  and Netherite (2031 / 9.0 / +4 / level 4 / ench 15).*/
 	public static final ToolMaterial Tarched = new ToolMaterial() {
 		@Override
 		public int getDurability() {
-			return 500;
+			return 1800;
 		}
 
 		@Override
 		public float getMiningSpeedMultiplier() {
-			return 7f;
+			return 8.5f;
 		}
 
 		@Override
 		public float getAttackDamage() {
-			return 2.5f;
+			return 3.5f;
 		}
 
 		@Override
 		public int getMiningLevel() {
-			return 3;
+			return 4;
 		}
 
 		@Override
 		public int getEnchantability() {
-			return 12;
+			return 13;
 		}
 
 		@Override

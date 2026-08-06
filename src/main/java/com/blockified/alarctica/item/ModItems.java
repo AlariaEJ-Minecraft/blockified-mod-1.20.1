@@ -4,7 +4,6 @@ import com.blockified.Blockified;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.minecraft.item.ArmorItem;
 import net.minecraft.item.Item;
-import net.minecraft.item.PickaxeItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
 import net.minecraft.util.Identifier;
@@ -22,7 +21,7 @@ public class ModItems {
 			new ExperienceAxeItem(ModToolMaterial.AxeOfExperience, 12, 1f, new FabricItemSettings(), 5, 10));
 
 	public static final Item TarchedPickaxe = registerItem("tarched_pickaxe",
-			new PickaxeItem(ModToolMaterial.Tarched, 1, -2.8f, new FabricItemSettings()));
+			new SmeltingPickaxeItem(ModToolMaterial.Tarched, 1, -2.8f, new FabricItemSettings()));
 
 	public static final Item IceTotemOfResistance = registerItem("ice_totem_of_resistance",
 			new Item(new FabricItemSettings().maxCount(1)));
