@@ -21,7 +21,6 @@ public class ModItemGroups {
 						entries.add(ModItems.TarIngot);
 						/*Blocks\/*/
 						entries.add(ModBlocks.HotTar);
-						entries.add(ModBlocks.ResistantPackedIce);
 						entries.add(ModBlocks.BlackIce);
 						entries.add(ModBlocks.CondensedIce);
 						entries.add(ModBlocks.ColdIce);

@@ -16,9 +16,6 @@ public class ModBlocks {
 			new Block(FabricBlockSettings.copyOf(Blocks.MAGMA_BLOCK).sounds(BlockSoundGroup.BASALT)
 					.resistance(40.5f)));
 
-	public static final Block ResistantPackedIce = registerBlock("resistant_packed_ice",
-			new Block(FabricBlockSettings.copyOf(Blocks.PACKED_ICE).resistance(1200f)));
-
 	/*Ice variants: slipperiness and standstill push both rank
 	  Hard Dense Ice > Cold Ice > Condensed Ice > Black Ice*/
 	public static final Block BlackIce = registerBlock("black_ice",
