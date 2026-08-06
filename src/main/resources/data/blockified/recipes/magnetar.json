@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "ABA",
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "blockified:magnetite_ingot"
+    },
+    "B": {
+      "item": "minecraft:redstone_torch"
+    }
+  },
+  "result": {
+    "item": "blockified:magnetar",
+    "count": 1
+  }
+}
