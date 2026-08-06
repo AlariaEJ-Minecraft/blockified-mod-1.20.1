@@ -16,20 +16,24 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 /**
- * Powder-Snow-style sinking: no collision for entities without boots (any
- * boots, not just leather), full collision for entities wearing boots.
- * A single layer resting on solid ground stops the entity at about half
- * depth; three or more stacked layers let the entity sink through and,
- * once their head is submerged, slowly drown.
+ * Powder-Snow-style sinking, done entirely through onEntityCollision (a
+ * shallow, entity-agnostic collision shape lets everyone's bounding box
+ * overlap the block so the collision hook reliably fires). Entities with
+ * any boots equipped are snapped to stand on top each tick, simulating
+ * full solid collision. A single layer resting on solid ground stops an
+ * unbooted entity at about half depth; three or more stacked layers let
+ * them sink through and, once their head is submerged, slowly drown.
  */
 public class MudBogBlock extends Block {
+	private static final VoxelShape SHALLOW_SHAPE = VoxelShapes.cuboid(0, 0, 0, 1, 0.25, 1);
+
 	public MudBogBlock(Settings settings) {
 		super(settings);
 	}
 
 	@Override
 	public VoxelShape getCollisionShape(BlockState state, BlockView world, BlockPos pos, ShapeContext context) {
-		return hasBoots(context.getEntity()) ? VoxelShapes.fullCube() : VoxelShapes.empty();
+		return SHALLOW_SHAPE;
 	}
 
 	private static boolean hasBoots(Entity entity) {
@@ -43,7 +47,17 @@ public class MudBogBlock extends Block {
 	@Override
 	public void onEntityCollision(BlockState state, World world, BlockPos pos, Entity entity) {
 		super.onEntityCollision(state, world, pos, entity);
-		if (world.isClient || !(entity instanceof LivingEntity living) || hasBoots(entity)) {
+		if (world.isClient || !(entity instanceof LivingEntity living)) {
+			return;
+		}
+
+		double top = pos.getY() + 1.0;
+		if (hasBoots(entity)) {
+			if (entity.getY() < top) {
+				entity.setPosition(entity.getX(), top, entity.getZ());
+				Vec3d vel = entity.getVelocity();
+				entity.setVelocity(vel.x, Math.max(vel.y, 0), vel.z);
+			}
 			return;
 		}
 
@@ -66,13 +80,13 @@ public class MudBogBlock extends Block {
 		boolean submerged = world.getBlockState(BlockPos.ofFloored(entity.getX(), entity.getEyeY(), entity.getZ()))
 				.getBlock() == this;
 		if (submerged) {
-			living.setAirSupply(living.getAirSupply() - 1);
-			if (living.getAirSupply() < -20) {
-				living.setAirSupply(0);
+			living.setAir(living.getAir() - 1);
+			if (living.getAir() < -20) {
+				living.setAir(0);
 				living.damage(world.getDamageSources().create(ModDamageTypes.MUD_BOG_DROWN), 2.0f);
 			}
 		} else {
-			living.setAirSupply(Math.min(living.getAirSupply() + 4, living.getMaxAirSupply()));
+			living.setAir(Math.min(living.getAir() + 4, living.getMaxAir()));
 		}
 	}
 }
