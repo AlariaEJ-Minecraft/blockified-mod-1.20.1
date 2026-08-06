@@ -1,6 +1,6 @@
 # Blockified
 
-A Fabric mod for Minecraft 1.20.1, based on the Blockified Mod on Modrinth. It adds a handful of self-contained material families — tar, engineered ice, bog hazards, magnetite, and quicksand — each with its own blocks, tools, and gimmick, rather than one giant unified system.
+A Fabric mod for Minecraft 1.20.1, based on the Blockified Mod on Modrinth. It adds a handful of self-contained material families — tar, engineered ice, bog hazards, magnetite, and more — each with its own blocks, tools, and gimmick, rather than one giant unified system.
 
 - **Minecraft:** 1.20.1
 - **Loader:** Fabric (requires Fabric API)
