@@ -1,0 +1,18 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "A A",
+    "A A"
+  ],
+  "key": {
+    "A": {
+      "item": "blockified:tar_ingot"
+    }
+  },
+  "result": {
+    "item": "blockified:tarched_leggings",
+    "count": 1
+  }
+}
