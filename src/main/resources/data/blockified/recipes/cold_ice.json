@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "ABA",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "item": "minecraft:ice"
+    },
+    "B": {
+      "item": "blockified:ice_totem_of_resistance"
+    }
+  },
+  "result": {
+    "item": "blockified:cold_ice",
+    "count": 6
+  }
+}
