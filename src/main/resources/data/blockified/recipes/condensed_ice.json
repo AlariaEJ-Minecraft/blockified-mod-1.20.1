@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AA",
+    "AA"
+  ],
+  "key": {
+    "A": {
+      "item": "blockified:cold_ice"
+    }
+  },
+  "result": {
+    "item": "blockified:condensed_ice",
+    "count": 6
+  }
+}
