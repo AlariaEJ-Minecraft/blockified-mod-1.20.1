@@ -1,0 +1,17 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA",
+    "A A"
+  ],
+  "key": {
+    "A": {
+      "item": "blockified:tar_ingot"
+    }
+  },
+  "result": {
+    "item": "blockified:tarched_helmet",
+    "count": 1
+  }
+}
