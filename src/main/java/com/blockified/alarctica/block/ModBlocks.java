@@ -34,6 +34,17 @@ public class ModBlocks {
 	public static final Block Oobleck = registerBlock("oobleck",
 			new Block(FabricBlockSettings.copyOf(Blocks.MUD)));
 
+	/*Soul Sand inspired bog trio; shovel is the effective tool
+	  (see data/minecraft/tags/blocks/mineable/shovel.json).*/
+	public static final Block ClayBog = registerBlock("clay_bog",
+			new ClayBogBlock(FabricBlockSettings.copyOf(Blocks.SOUL_SAND)));
+
+	public static final Block BogBlock = registerBlock("bog_block",
+			new BogSurfaceBlock(FabricBlockSettings.copyOf(Blocks.SOUL_SAND)));
+
+	public static final Block MudBog = registerBlock("mud_bog",
+			new MudBogBlock(FabricBlockSettings.copyOf(Blocks.POWDER_SNOW)));
+
 	/*-----------*/
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);

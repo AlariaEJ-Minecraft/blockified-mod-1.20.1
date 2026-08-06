@@ -18,6 +18,11 @@
   "block.blockified.cold_ice": "Cold Ice",
   "block.blockified.hard_dense_ice": "Hard Dense Ice",
   "block.blockified.oobleck": "Oobleck",
+  "block.blockified.clay_bog": "Clay Bog",
+  "block.blockified.bog_block": "Bog Block",
+  "block.blockified.mud_bog": "Mud Bog",
+
+  "death.attack.mud_bog_drown": "%1$s has sunk and drowned to a Mud Bog Marsh",
 
   "itemgroup.blockified": "Blockified! By Alarctica"
 }

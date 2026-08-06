@@ -1,0 +1,8 @@
+{
+  "replace": false,
+  "values": [
+    "blockified:clay_bog",
+    "blockified:bog_block",
+    "blockified:mud_bog"
+  ]
+}
