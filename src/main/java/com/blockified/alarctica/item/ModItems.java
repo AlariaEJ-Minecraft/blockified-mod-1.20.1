@@ -19,6 +19,9 @@ public class ModItems {
 	public static final Item AxeOfExperience = registerItem("axe_of_experience",
 			new ExperienceAxeItem(ModToolMaterial.AxeOfExperience, 12, 1f, new FabricItemSettings(), 5, 10));
 
+	public static final Item IceTotemOfResistance = registerItem("ice_totem_of_resistance",
+			new Item(new FabricItemSettings().maxCount(1)));
+
 	/**//**//**//**//**/
 	private static Item registerItem(String name, Item item) {
 		return Registry.register(Registries.ITEM, new Identifier(Blockified.MOD_ID, name), item);
