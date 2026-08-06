@@ -1,0 +1,16 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "AAA"
+  ],
+  "key": {
+    "A": {
+      "item": "blockified:tarched_coal"
+    }
+  },
+  "result": {
+    "item": "blockified:tar_ingot",
+    "count": 10
+  }
+}
