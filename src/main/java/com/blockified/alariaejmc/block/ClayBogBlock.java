@@ -1,4 +1,4 @@
-package com.blockified.alarctica.block;
+package com.blockified.alariaejmc.block;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.world.BlockView;

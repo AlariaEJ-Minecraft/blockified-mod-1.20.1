@@ -1,4 +1,4 @@
-package com.blockified.alarctica.item;
+package com.blockified.alariaejmc.item;
 
 import net.minecraft.item.PickaxeItem;
 import net.minecraft.item.ToolMaterial;

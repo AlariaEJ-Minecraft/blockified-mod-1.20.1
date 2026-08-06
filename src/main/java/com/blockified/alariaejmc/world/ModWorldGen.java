@@ -1,4 +1,4 @@
-package com.blockified.alarctica.world;
+package com.blockified.alariaejmc.world;
 
 import com.blockified.Blockified;
 import net.fabricmc.fabric.api.biome.v1.BiomeModifications;

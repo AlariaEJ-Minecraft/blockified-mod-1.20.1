@@ -1,6 +1,6 @@
-package com.blockified.alarctica.item;
+package com.blockified.alariaejmc.item;
 
-import com.blockified.alarctica.block.ModBlocks;
+import com.blockified.alariaejmc.block.ModBlocks;
 import net.fabricmc.fabric.api.entity.event.v1.ServerLivingEntityEvents;
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.fabricmc.fabric.api.event.player.PlayerBlockBreakEvents;

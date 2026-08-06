@@ -1,4 +1,4 @@
-package com.blockified.alarctica.item;
+package com.blockified.alariaejmc.item;
 
 import com.blockified.Blockified;
 import net.fabricmc.fabric.api.item.v1.FabricItemSettings;

@@ -1,10 +1,10 @@
 package com.blockified;
 
-import com.blockified.alarctica.block.ModBlocks;
-import com.blockified.alarctica.item.ModEvents;
-import com.blockified.alarctica.item.ModItemGroups;
-import com.blockified.alarctica.item.ModItems;
-import com.blockified.alarctica.world.ModWorldGen;
+import com.blockified.alariaejmc.block.ModBlocks;
+import com.blockified.alariaejmc.item.ModEvents;
+import com.blockified.alariaejmc.item.ModItemGroups;
+import com.blockified.alariaejmc.item.ModItems;
+import com.blockified.alariaejmc.world.ModWorldGen;
 import net.fabricmc.api.ModInitializer;
 
 public class Blockified implements ModInitializer {

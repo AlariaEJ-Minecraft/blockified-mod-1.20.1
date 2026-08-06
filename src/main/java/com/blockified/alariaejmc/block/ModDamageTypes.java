@@ -1,4 +1,4 @@
-package com.blockified.alarctica.block;
+package com.blockified.alariaejmc.block;
 
 import com.blockified.Blockified;
 import net.minecraft.entity.damage.DamageType;

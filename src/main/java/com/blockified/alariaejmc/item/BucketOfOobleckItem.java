@@ -1,6 +1,6 @@
-package com.blockified.alarctica.item;
+package com.blockified.alariaejmc.item;
 
-import com.blockified.alarctica.block.ModBlocks;
+import com.blockified.alariaejmc.block.ModBlocks;
 import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;

@@ -1,7 +1,7 @@
-package com.blockified.alarctica.item;
+package com.blockified.alariaejmc.item;
 
 import com.blockified.Blockified;
-import com.blockified.alarctica.block.ModBlocks;
+import com.blockified.alariaejmc.block.ModBlocks;
 import net.fabricmc.fabric.api.itemgroup.v1.FabricItemGroup;
 import net.minecraft.item.ItemGroup;
 import net.minecraft.item.ItemStack;
