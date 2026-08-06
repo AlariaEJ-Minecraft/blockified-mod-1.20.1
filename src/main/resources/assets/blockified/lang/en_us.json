@@ -9,12 +9,15 @@
   "item.blockified.tarched_chestplate": "Tarched Chestplate",
   "item.blockified.tarched_leggings": "Tarched Leggings",
   "item.blockified.tarched_boots": "Tarched Boots",
+  "item.blockified.bucket_of_oobleck": "Bucket of Oobleck",
+  "item.blockified.empty_bucket_of_oobleck": "Empty Oobleck Bucket",
 
   "block.blockified.hot_tar": "Hot Tar",
   "block.blockified.black_ice": "Black Ice",
   "block.blockified.condensed_ice": "Condensed Ice",
   "block.blockified.cold_ice": "Cold Ice",
   "block.blockified.hard_dense_ice": "Hard Dense Ice",
+  "block.blockified.oobleck": "Oobleck",
 
   "itemgroup.blockified": "Blockified! By Alarctica"
 }

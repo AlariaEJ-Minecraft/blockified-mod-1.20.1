@@ -42,6 +42,13 @@ public class ModItems {
 	public static final Item TarchedBoots = registerItem("tarched_boots",
 			new ArmorItem(ModArmorMaterial.Tarched, ArmorItem.Type.BOOTS, new FabricItemSettings()));
 
+	/*Oobleck*/
+	public static final Item BucketOfOobleck = registerItem("bucket_of_oobleck",
+			new BucketOfOobleckItem(new FabricItemSettings().maxCount(1)));
+
+	public static final Item EmptyOobleckBucket = registerItem("empty_bucket_of_oobleck",
+			new EmptyOobleckBucketItem(new FabricItemSettings().maxCount(16)));
+
 	/**//**//**//**//**/
 	private static Item registerItem(String name, Item item) {
 		return Registry.register(Registries.ITEM, new Identifier(Blockified.MOD_ID, name), item);

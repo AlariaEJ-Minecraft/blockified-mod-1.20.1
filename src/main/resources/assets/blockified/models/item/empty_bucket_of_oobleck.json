@@ -1,0 +1,6 @@
+{
+  "parent": "item/generated",
+  "textures": {
+    "layer0": "blockified:item/empty_bucket_of_oobleck"
+  }
+}

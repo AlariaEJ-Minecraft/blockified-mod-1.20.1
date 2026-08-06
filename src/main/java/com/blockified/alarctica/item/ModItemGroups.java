@@ -26,6 +26,9 @@ public class ModItemGroups {
 						entries.add(ModBlocks.CondensedIce);
 						entries.add(ModBlocks.ColdIce);
 						entries.add(ModBlocks.HardDenseIce);
+						entries.add(ModBlocks.Oobleck);
+						entries.add(ModItems.BucketOfOobleck);
+						entries.add(ModItems.EmptyOobleckBucket);
 						/*Tools & Weapons \/*/
 						entries.add(ModItems.SwordOfExperience);
 						entries.add(ModItems.AxeOfExperience);

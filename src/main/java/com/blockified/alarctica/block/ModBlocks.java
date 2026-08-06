@@ -30,6 +30,10 @@ public class ModBlocks {
 	public static final Block HardDenseIce = registerBlock("hard_dense_ice",
 			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE).slipperiness(0.994f), 0.028));
 
+	/*Placed/picked up via bucket; no fluid physics.*/
+	public static final Block Oobleck = registerBlock("oobleck",
+			new Block(FabricBlockSettings.copyOf(Blocks.MUD)));
+
 	/*-----------*/
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);
