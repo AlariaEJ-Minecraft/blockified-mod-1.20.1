@@ -1,0 +1,21 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    " A ",
+    "ABA",
+    " A "
+  ],
+  "key": {
+    "A": {
+      "item": "blockified:magnetite_ingot"
+    },
+    "B": {
+      "item": "minecraft:compass"
+    }
+  },
+  "result": {
+    "item": "blockified:magnetite_compass",
+    "count": 1
+  }
+}
