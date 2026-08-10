@@ -17,17 +17,18 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.UUID;
 
 /**
- * Quicksand: staying still sinks fast (SINK_RATE); continuous horizontal
- * motion instead pulls the entity back up (RISE_RATE), so the only way to
- * cross a patch safely is to keep walking/sprinting through it. Sideways
- * movement is always heavily dampened (sticky), and once past half of the
- * spot's max depth an extra Slowness stacks on top, so a sunk entity has to
- * fight through both to climb back out. LEVEL (world-gen depth, 1-6) caps
- * how far under a given spot a fully idle entity can go.
+ * Quicksand: standing still sinks you (SINK_RATE), while moving pulls you
+ * back up (RISE_RATE), so crossing a patch means keeping going. Struggling
+ * upward counts too - jumping and swimming climb out just like walking
+ * does. Sideways movement is always heavily dampened (sticky), and once
+ * past half of a spot's max depth an extra Slowness stacks on top, so
+ * anything properly sunk has to fight both. LEVEL (world-gen depth, 1-6)
+ * caps how far under a given spot an idle entity can go.
  *
  * Collision uses a shallow shape capped at 0.3 (like MudBogBlock) so the
  * entity's bounding box reliably overlaps it regardless of LEVEL, while
@@ -42,7 +43,15 @@ public class OobleckBlock extends Block {
 	private static final float STICKY_MULTIPLIER = 0.2f;
 	private static final float SUNK_MULTIPLIER = 0.08f;
 
-	private static final Map<UUID, Double> sinkDepth = new HashMap<>();
+	private static final int FORGET_AFTER_TICKS = 200;
+	private static final int PRUNE_WHEN_LARGER_THAN = 128;
+
+	private static final class Sinking {
+		double depth;
+		long lastTick;
+	}
+
+	private static final Map<UUID, Sinking> sinking = new HashMap<>();
 
 	public OobleckBlock(Settings settings) {
 		super(settings);
@@ -71,30 +80,63 @@ public class OobleckBlock extends Block {
 			return;
 		}
 
+		long now = world.getTime();
 		UUID id = living.getUuid();
-		double maxDepth = state.get(LEVEL) / 6.0;
-		boolean moving = living.getVelocity().horizontalLength() > MOVING_THRESHOLD;
+		Sinking sink = sinking.get(id);
 
-		double depth = sinkDepth.getOrDefault(id, 0.0);
-		depth = moving ? Math.max(0.0, depth - RISE_RATE) : Math.min(maxDepth, depth + SINK_RATE);
-		if (depth <= 0.0) {
-			sinkDepth.remove(id);
-		} else {
-			sinkDepth.put(id, depth);
+		/*This fires once per Oobleck block the entity overlaps, so standing
+		  across a boundary would otherwise sink and dampen two to four times
+		  in a single tick. Only the first block each tick gets to act.*/
+		if (sink != null && sink.lastTick == now) {
+			return;
 		}
+		if (sink == null) {
+			sink = new Sinking();
+			sinking.put(id, sink);
+			prune(now);
+		}
+		sink.lastTick = now;
 
-		double top = pos.getY() + 1.0 - depth;
+		Vec3d velocity = living.getVelocity();
+		/*Upward motion counts as struggling free, not just horizontal. A
+		  jump is nearly all vertical, so measuring width alone scored every
+		  airborne tick as standing still and drove the player deeper.*/
+		boolean climbing = velocity.horizontalLength() > MOVING_THRESHOLD
+				|| velocity.y > MOVING_THRESHOLD;
+
+		double maxDepth = state.get(LEVEL) / 6.0;
+		sink.depth = climbing
+				? Math.max(0.0, sink.depth - RISE_RATE)
+				: Math.min(maxDepth, sink.depth + SINK_RATE);
+
+		/*Deliberately kept at depth 0 rather than dropped: removing it here
+		  would let another overlapping block re-process this same tick.
+		  prune() clears it once the entity has been gone a while.*/
+		double top = pos.getY() + 1.0 - sink.depth;
 		if (living.getY() < top) {
 			living.setPosition(living.getX(), top, living.getZ());
 		}
 
-		boolean sunk = depth > maxDepth * 0.5;
+		boolean sunk = sink.depth > maxDepth * 0.5;
 		float multiplier = sunk ? SUNK_MULTIPLIER : STICKY_MULTIPLIER;
-		Vec3d velocity = living.getVelocity();
 		living.setVelocity(velocity.multiply(multiplier, velocity.y < 0 ? 0.7 : 1.0, multiplier));
 
 		if (sunk) {
 			living.addStatusEffect(new StatusEffectInstance(StatusEffects.SLOWNESS, 20, 3, true, false));
+		}
+	}
+
+	/*Entities that wander off while still sunk would otherwise sit in the
+	  map forever.*/
+	private static void prune(long now) {
+		if (sinking.size() <= PRUNE_WHEN_LARGER_THAN) {
+			return;
+		}
+		Iterator<Map.Entry<UUID, Sinking>> it = sinking.entrySet().iterator();
+		while (it.hasNext()) {
+			if (now - it.next().getValue().lastTick > FORGET_AFTER_TICKS) {
+				it.remove();
+			}
 		}
 	}
 }
