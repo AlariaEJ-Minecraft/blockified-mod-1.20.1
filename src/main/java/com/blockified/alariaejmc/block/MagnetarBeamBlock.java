@@ -1,6 +1,7 @@
 package com.blockified.alariaejmc.block;
 
 import net.minecraft.block.Block;
+import net.minecraft.block.BlockRenderType;
 import net.minecraft.block.BlockState;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.state.StateManager;
@@ -14,20 +15,25 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldAccess;
 
 /**
- * One segment of a Magnetar's beam. Emits weak redstone power on every
- * side exactly like a Block of Redstone, so anything vanilla can be
- * driven by it - lamps, pistons, doors, repeaters, comparators, wire,
- * dispensers - rather than only redstone wire the way the old radius
- * scan managed.
+ * Invisible one-block node that a Magnetar parks against whatever its
+ * line of sight lands on, so the link genuinely looks wireless - nothing
+ * is drawn between the two.
  *
- * Segments verify the block behind them is either the emitting Magnetar
- * or another segment pointing the same way, and delete themselves when
- * that stops being true. That makes the beam shorten by itself when
- * something is placed in its path and clean up if its Magnetar vanishes
- * without warning (chunk churn, world edits, a piston shoving it).
+ * A node exists at all only because redstone power in Minecraft is
+ * strictly local: something has to sit next to the target and emit, or
+ * lamps, pistons, doors and repeaters simply never see a signal. It
+ * emits weak power on every side exactly like a Block of Redstone, which
+ * is what lets every vanilla component respond normally.
+ *
+ * FACING stores the direction the link travelled, so the node can look
+ * back along that axis for its Magnetar and delete itself once that stops
+ * checking out - covering chunk churn, world edits, or the block being
+ * removed while the node was unloaded.
  */
 public class MagnetarBeamBlock extends Block {
 	public static final DirectionProperty FACING = Properties.FACING;
+
+	private static final int MAX_LINK_LENGTH = 32;
 
 	public MagnetarBeamBlock(Settings settings) {
 		super(settings);
@@ -39,15 +45,33 @@ public class MagnetarBeamBlock extends Block {
 		builder.add(FACING);
 	}
 
+	/*Drawn as nothing at all - the point of the rework. The blockstate and
+	  model still exist so the game has a particle texture to fall back on.*/
+	@Override
+	public BlockRenderType getRenderType(BlockState state) {
+		return BlockRenderType.INVISIBLE;
+	}
+
+	/**
+	 * Walks back along the link axis looking for the Magnetar that owns
+	 * this node: everything in between has to be air (or another node),
+	 * and the block found has to be an ON Magnetar pointing this way.
+	 */
 	public static boolean isSupported(BlockView world, BlockState state, BlockPos pos) {
 		Direction facing = state.get(FACING);
-		BlockState behind = world.getBlockState(pos.offset(facing.getOpposite()));
-		if (behind.getBlock() instanceof MagnetarBlock) {
-			return behind.get(MagnetarBlock.STATE) == MagnetarBlock.MagnetarState.ON
-					&& behind.get(MagnetarBlock.FACING) == facing;
-		}
-		if (behind.getBlock() instanceof MagnetarBeamBlock) {
-			return behind.get(FACING) == facing;
+		BlockPos.Mutable cursor = pos.mutableCopy();
+		for (int i = 0; i < MAX_LINK_LENGTH; i++) {
+			cursor.move(facing.getOpposite());
+			BlockState behind = world.getBlockState(cursor);
+
+			if (behind.getBlock() instanceof MagnetarBlock) {
+				return behind.get(MagnetarBlock.STATE) == MagnetarBlock.MagnetarState.ON
+						&& behind.get(MagnetarBlock.FACING) == facing;
+			}
+			if (behind.isAir() || behind.getBlock() instanceof MagnetarBeamBlock) {
+				continue;
+			}
+			return false;
 		}
 		return false;
 	}

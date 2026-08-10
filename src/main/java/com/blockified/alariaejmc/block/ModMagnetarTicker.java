@@ -12,27 +12,29 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
 import java.util.Set;
 
 /**
  * Drives Magnetar blocks without needing a BlockEntity: a short power-up
- * countdown, then upkeep of the beam projected from the block's front
+ * countdown, then upkeep of the wireless link projected from the front
  * face while it stays ON.
  *
- * The beam runs in a straight line - line of sight - and stops at the
- * first block that isn't air, so whatever it runs into is powered by the
- * final segment sitting against it. Segments are ordinary redstone
- * sources, so this works with every vanilla component; the old version
- * force-wrote RedstoneWireBlock.POWER over a radius, which only ever
- * moved wire and let that forced power travel back down the wire into
- * the Magnetar and latch it on.
+ * The link is a line of sight - it runs straight ahead through air until
+ * it meets a block - but nothing is drawn along the way. All that gets
+ * placed is a single invisible node in the last air cell, resting against
+ * whatever was hit, because redstone power is strictly local and a real
+ * emitter has to be adjacent for lamps, pistons or doors to react. Fewer
+ * than two blocks apart needs no node at all: the Magnetar's own front
+ * face already reaches.
  */
 public class ModMagnetarTicker {
 	private static final int POWER_UP_TICKS = 30;
-	private static final int MAX_BEAM_LENGTH = 32;
+	private static final int MAX_LINK_LENGTH = 32;
 
 	private static final Map<GlobalPos, Integer> poweringUp = new HashMap<>();
 	private static final Set<GlobalPos> active = new HashSet<>();
+	private static final Map<GlobalPos, BlockPos> nodes = new HashMap<>();
 
 	public static void startPoweringUp(net.minecraft.world.World world, BlockPos pos) {
 		GlobalPos gp = toGlobalPos(world, pos);
@@ -49,8 +51,9 @@ public class ModMagnetarTicker {
 		poweringUp.remove(gp);
 		active.remove(gp);
 		if (world instanceof ServerWorld serverWorld) {
-			clearBeam(serverWorld, pos, facing);
+			clearNode(serverWorld, gp);
 		}
+		nodes.remove(gp);
 	}
 
 	/*Read-only view for ModMagnetiteCompassTicker, which needs to find the
@@ -67,38 +70,60 @@ public class ModMagnetarTicker {
 	}
 
 	/**
-	 * Extends the beam forward over air, leaving anything else alone and
-	 * stopping there. Segments already in place are stepped over, so this
-	 * is safe to call every tick.
+	 * Traces the line of sight and returns the cell the node belongs in -
+	 * the last air block before whatever the link runs into. Returns null
+	 * when there is nothing to power: either the target is already touching
+	 * the front face, or the line runs out to max range without hitting
+	 * anything.
 	 */
-	private static void projectBeam(ServerWorld world, BlockPos origin, Direction facing) {
+	private static BlockPos findNodePos(ServerWorld world, BlockPos origin, Direction facing) {
 		BlockPos.Mutable cursor = origin.mutableCopy();
-		for (int i = 0; i < MAX_BEAM_LENGTH; i++) {
+		BlockPos lastPassable = null;
+
+		for (int i = 0; i < MAX_LINK_LENGTH; i++) {
 			cursor.move(facing);
 			BlockState state = world.getBlockState(cursor);
 
-			if (state.getBlock() instanceof MagnetarBeamBlock && state.get(MagnetarBeamBlock.FACING) == facing) {
+			if (state.isAir() || state.getBlock() instanceof MagnetarBeamBlock) {
+				lastPassable = cursor.toImmutable();
 				continue;
 			}
-			if (state.isAir()) {
-				world.setBlockState(cursor, ModBlocks.MagnetarBeam.getDefaultState()
-						.with(MagnetarBeamBlock.FACING, facing), 3);
-				continue;
-			}
+			return lastPassable;
+		}
+		return null;
+	}
+
+	private static void clearNode(ServerWorld world, GlobalPos owner) {
+		BlockPos node = nodes.get(owner);
+		if (node == null) {
 			return;
+		}
+		if (world.getBlockState(node).getBlock() instanceof MagnetarBeamBlock) {
+			world.removeBlock(node, false);
 		}
 	}
 
-	private static void clearBeam(ServerWorld world, BlockPos origin, Direction facing) {
-		BlockPos.Mutable cursor = origin.mutableCopy();
-		for (int i = 0; i < MAX_BEAM_LENGTH; i++) {
-			cursor.move(facing);
-			BlockState state = world.getBlockState(cursor);
-			if (!(state.getBlock() instanceof MagnetarBeamBlock) || state.get(MagnetarBeamBlock.FACING) != facing) {
-				return;
+	private static void updateNode(ServerWorld world, GlobalPos owner, BlockPos desired, Direction facing) {
+		BlockPos current = nodes.get(owner);
+		if (Objects.equals(current, desired)) {
+			/*Re-place it if something removed the node behind our back.*/
+			if (desired != null && !(world.getBlockState(desired).getBlock() instanceof MagnetarBeamBlock)
+					&& world.getBlockState(desired).isAir()) {
+				world.setBlockState(desired, ModBlocks.MagnetarBeam.getDefaultState()
+						.with(MagnetarBeamBlock.FACING, facing), 3);
 			}
-			world.removeBlock(cursor, false);
+			return;
 		}
+
+		clearNode(world, owner);
+		if (desired == null) {
+			nodes.remove(owner);
+			return;
+		}
+
+		world.setBlockState(desired, ModBlocks.MagnetarBeam.getDefaultState()
+				.with(MagnetarBeamBlock.FACING, facing), 3);
+		nodes.put(owner, desired);
 	}
 
 	public static void registerTicking() {
@@ -139,6 +164,8 @@ public class ModMagnetarTicker {
 				if (!(magnetarState.getBlock() instanceof MagnetarBlock)
 						|| magnetarState.get(MagnetarBlock.STATE) != MagnetarBlock.MagnetarState.ON) {
 					activeIterator.remove();
+					clearNode(world, gp);
+					nodes.remove(gp);
 					continue;
 				}
 
@@ -146,16 +173,17 @@ public class ModMagnetarTicker {
 
 				/*Re-check the back face here as well as in neighborUpdate:
 				  a source can stop powering us without ever notifying this
-				  block, and going stale would leave the beam stuck on.*/
+				  block, and going stale would leave the link stuck on.*/
 				if (!MagnetarBlock.isReceivingPowerFromBack(world, center, facing)) {
 					activeIterator.remove();
-					clearBeam(world, center, facing);
+					clearNode(world, gp);
+					nodes.remove(gp);
 					world.setBlockState(center, magnetarState.with(MagnetarBlock.STATE, MagnetarBlock.MagnetarState.OFF));
 					world.updateNeighborsAlways(center, magnetarState.getBlock());
 					continue;
 				}
 
-				projectBeam(world, center, facing);
+				updateNode(world, gp, findNodePos(world, center, facing), facing);
 			}
 		});
 	}

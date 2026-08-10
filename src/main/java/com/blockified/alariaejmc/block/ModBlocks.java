@@ -59,16 +59,17 @@ public class ModBlocks {
 	public static final Block Magnetar = registerBlock("magnetar",
 			new MagnetarBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
 
-	/*Beam segment. No BlockItem - only a Magnetar creates these. Walk
-	  through, replaceable so building into the beam just shortens it, and
-	  destroyed rather than shoved when a piston hits it.*/
+	/*Invisible emitter node a Magnetar parks against its target so the
+	  link reads as wireless. No BlockItem - only a Magnetar creates these.
+	  Walk through, replaceable so building over it just moves the link,
+	  and destroyed rather than shoved when a piston hits it. No luminance
+	  on purpose: light with no visible source looks like a bug.*/
 	public static final Block MagnetarBeam = registerBlockWithoutItem("magnetar_beam",
 			new MagnetarBeamBlock(FabricBlockSettings.create()
 					.noCollision()
 					.replaceable()
 					.dropsNothing()
 					.nonOpaque()
-					.luminance(state -> 10)
 					.strength(-1.0f, 3600000.0f)
 					.pistonBehavior(PistonBehavior.DESTROY)));
 
