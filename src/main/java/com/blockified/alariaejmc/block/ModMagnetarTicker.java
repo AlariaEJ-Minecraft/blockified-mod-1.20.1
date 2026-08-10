@@ -146,10 +146,10 @@ public class ModMagnetarTicker {
 
 				Direction facing = magnetarState.get(MagnetarBlock.FACING);
 
-				/*Re-check the back face here as well as in neighborUpdate:
+				/*Re-check the inputs here as well as in neighborUpdate:
 				  a source can stop powering us without ever notifying this
 				  block, and going stale would leave the link stuck on.*/
-				if (!MagnetarBlock.isReceivingPowerFromBack(world, center, facing)) {
+				if (!MagnetarBlock.isReceivingPowerFromInputs(world, center, facing)) {
 					activeIterator.remove();
 					clearNode(world, gp);
 					nodes.remove(gp);
