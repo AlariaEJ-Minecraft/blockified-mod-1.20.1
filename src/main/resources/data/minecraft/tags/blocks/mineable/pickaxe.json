@@ -1,0 +1,12 @@
+{
+  "replace": false,
+  "values": [
+    "blockified:hot_tar",
+    "blockified:black_ice",
+    "blockified:condensed_ice",
+    "blockified:cold_ice",
+    "blockified:hard_dense_ice",
+    "blockified:magnetite_ore_block",
+    "blockified:magnetar"
+  ]
+}
