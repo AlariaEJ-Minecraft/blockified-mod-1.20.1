@@ -1,71 +1,48 @@
 {
   "variants": {
-    "facing=north,magnetar_state=off": {
+    "facing=north,lit=false": {
       "model": "blockified:block/magnetar_off"
     },
-    "facing=south,magnetar_state=off": {
+    "facing=south,lit=false": {
       "model": "blockified:block/magnetar_off",
       "y": 180
     },
-    "facing=east,magnetar_state=off": {
+    "facing=east,lit=false": {
       "model": "blockified:block/magnetar_off",
       "y": 90
     },
-    "facing=west,magnetar_state=off": {
+    "facing=west,lit=false": {
       "model": "blockified:block/magnetar_off",
       "y": 270
     },
-    "facing=up,magnetar_state=off": {
+    "facing=up,lit=false": {
       "model": "blockified:block/magnetar_off",
       "x": 270
     },
-    "facing=down,magnetar_state=off": {
+    "facing=down,lit=false": {
       "model": "blockified:block/magnetar_off",
       "x": 90
     },
-    "facing=north,magnetar_state=powering_up": {
-      "model": "blockified:block/magnetar_powering_up"
-    },
-    "facing=south,magnetar_state=powering_up": {
-      "model": "blockified:block/magnetar_powering_up",
-      "y": 180
-    },
-    "facing=east,magnetar_state=powering_up": {
-      "model": "blockified:block/magnetar_powering_up",
-      "y": 90
-    },
-    "facing=west,magnetar_state=powering_up": {
-      "model": "blockified:block/magnetar_powering_up",
-      "y": 270
-    },
-    "facing=up,magnetar_state=powering_up": {
-      "model": "blockified:block/magnetar_powering_up",
-      "x": 270
-    },
-    "facing=down,magnetar_state=powering_up": {
-      "model": "blockified:block/magnetar_powering_up",
-      "x": 90
-    },
-    "facing=north,magnetar_state=on": {
+    "facing=north,lit=true": {
       "model": "blockified:block/magnetar_on"
     },
-    "facing=south,magnetar_state=on": {
+    "facing=south,lit=true": {
       "model": "blockified:block/magnetar_on",
       "y": 180
     },
-    "facing=east,magnetar_state=on": {
+    "facing=east,lit=true": {
       "model": "blockified:block/magnetar_on",
       "y": 90
     },
-    "facing=west,magnetar_state=on": {
+    "facing=west,lit=true": {
       "model": "blockified:block/magnetar_on",
       "y": 270
     },
-    "facing=up,magnetar_state=on": {
+    "facing=up,lit=true": {
       "model": "blockified:block/magnetar_on",
       "x": 270
     },
-    "facing=down,magnetar_state=on": {
+    "facing=down,lit=true": {
       "model": "blockified:block/magnetar_on",
       "x": 90
     }

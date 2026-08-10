@@ -16,9 +16,9 @@ import java.util.Objects;
 import java.util.Set;
 
 /**
- * Drives Magnetar blocks without needing a BlockEntity: a short power-up
- * countdown, then upkeep of the wireless link projected from the front
- * face while it stays ON.
+ * Keeps each lit Magnetar's wireless link up to date, without needing a
+ * BlockEntity. Switching is immediate - the block itself handles that in
+ * neighborUpdate - so all this does is maintain the link.
  *
  * The link is a line of sight - it runs straight ahead through air until
  * it meets a block - but nothing is drawn along the way. All that gets
@@ -29,17 +29,15 @@ import java.util.Set;
  * face already reaches.
  */
 public class ModMagnetarTicker {
-	private static final int POWER_UP_TICKS = 30;
 	private static final int MAX_LINK_LENGTH = 32;
 
-	private static final Map<GlobalPos, Integer> poweringUp = new HashMap<>();
 	private static final Set<GlobalPos> active = new HashSet<>();
 	private static final Map<GlobalPos, BlockPos> nodes = new HashMap<>();
 
-	public static void startPoweringUp(net.minecraft.world.World world, BlockPos pos) {
+	public static void activate(net.minecraft.world.World world, BlockPos pos) {
 		GlobalPos gp = toGlobalPos(world, pos);
 		if (gp != null) {
-			poweringUp.put(gp, POWER_UP_TICKS);
+			active.add(gp);
 		}
 	}
 
@@ -48,7 +46,6 @@ public class ModMagnetarTicker {
 		if (gp == null) {
 			return;
 		}
-		poweringUp.remove(gp);
 		active.remove(gp);
 		if (world instanceof ServerWorld serverWorld) {
 			clearNode(serverWorld, gp);
@@ -128,28 +125,6 @@ public class ModMagnetarTicker {
 
 	public static void registerTicking() {
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
-			Iterator<Map.Entry<GlobalPos, Integer>> countdownIterator = poweringUp.entrySet().iterator();
-			while (countdownIterator.hasNext()) {
-				Map.Entry<GlobalPos, Integer> entry = countdownIterator.next();
-				ServerWorld world = server.getWorld(entry.getKey().getDimension());
-				BlockPos pos = entry.getKey().getPos();
-				if (world == null || !(world.getBlockState(pos).getBlock() instanceof MagnetarBlock)) {
-					countdownIterator.remove();
-					continue;
-				}
-
-				int remaining = entry.getValue() - 1;
-				if (remaining <= 0) {
-					BlockState state = world.getBlockState(pos);
-					world.setBlockState(pos, state.with(MagnetarBlock.STATE, MagnetarBlock.MagnetarState.ON));
-					world.updateNeighborsAlways(pos, state.getBlock());
-					active.add(entry.getKey());
-					countdownIterator.remove();
-				} else {
-					entry.setValue(remaining);
-				}
-			}
-
 			Iterator<GlobalPos> activeIterator = active.iterator();
 			while (activeIterator.hasNext()) {
 				GlobalPos gp = activeIterator.next();
@@ -162,7 +137,7 @@ public class ModMagnetarTicker {
 
 				BlockState magnetarState = world.getBlockState(center);
 				if (!(magnetarState.getBlock() instanceof MagnetarBlock)
-						|| magnetarState.get(MagnetarBlock.STATE) != MagnetarBlock.MagnetarState.ON) {
+						|| !magnetarState.get(MagnetarBlock.LIT)) {
 					activeIterator.remove();
 					clearNode(world, gp);
 					nodes.remove(gp);
@@ -178,7 +153,7 @@ public class ModMagnetarTicker {
 					activeIterator.remove();
 					clearNode(world, gp);
 					nodes.remove(gp);
-					world.setBlockState(center, magnetarState.with(MagnetarBlock.STATE, MagnetarBlock.MagnetarState.OFF));
+					world.setBlockState(center, magnetarState.with(MagnetarBlock.LIT, false));
 					world.updateNeighborsAlways(center, magnetarState.getBlock());
 					continue;
 				}

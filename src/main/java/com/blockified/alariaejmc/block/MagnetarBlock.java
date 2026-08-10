@@ -4,58 +4,36 @@ import net.minecraft.block.Block;
 import net.minecraft.block.BlockState;
 import net.minecraft.item.ItemPlacementContext;
 import net.minecraft.state.StateManager;
+import net.minecraft.state.property.BooleanProperty;
 import net.minecraft.state.property.DirectionProperty;
-import net.minecraft.state.property.EnumProperty;
 import net.minecraft.state.property.Properties;
-import net.minecraft.util.StringIdentifiable;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.Direction;
 import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 /**
- * Polarised like an observer: signal goes in the back, output comes out
- * the front, and the four side faces do nothing at all. Feeding the
- * front is ignored by design - the first beam segment sits against it,
- * so treating it as input would latch the block on forever and it could
- * never be switched off.
+ * A plain lit/unlit redstone component, switching the moment its input
+ * changes the way a Redstone Lamp does - no wind-up state, no cooldown.
  *
- * Off/powering-up/on is driven by whatever powers the back face. Once ON
- * it acts as an ordinary redstone source out of the front, and
- * ModMagnetarTicker projects a beam of MagnetarBeamBlock straight ahead
- * until it hits something. Those segments are themselves real redstone
- * sources, which is what makes this work with every vanilla component
- * rather than only wire.
+ * Output leaves the front face, where ModMagnetarTicker also projects an
+ * invisible wireless link out to whatever the block is aimed at. The back
+ * face is the input and never emits: it is the one face that must stay
+ * silent, since powering it would feed this block's own signal straight
+ * back into its trigger and latch it on for good.
  */
 public class MagnetarBlock extends Block {
-	public enum MagnetarState implements StringIdentifiable {
-		OFF("off"),
-		POWERING_UP("powering_up"),
-		ON("on");
-
-		private final String name;
-
-		MagnetarState(String name) {
-			this.name = name;
-		}
-
-		@Override
-		public String asString() {
-			return name;
-		}
-	}
-
-	public static final EnumProperty<MagnetarState> STATE = EnumProperty.of("magnetar_state", MagnetarState.class);
+	public static final BooleanProperty LIT = Properties.LIT;
 	public static final DirectionProperty FACING = Properties.FACING;
 
 	public MagnetarBlock(Settings settings) {
 		super(settings);
-		setDefaultState(getStateManager().getDefaultState().with(STATE, MagnetarState.OFF).with(FACING, Direction.NORTH));
+		setDefaultState(getStateManager().getDefaultState().with(LIT, false).with(FACING, Direction.NORTH));
 	}
 
 	@Override
 	protected void appendProperties(StateManager.Builder<Block, BlockState> builder) {
-		builder.add(STATE, FACING);
+		builder.add(LIT, FACING);
 	}
 
 	@Override
@@ -82,15 +60,18 @@ public class MagnetarBlock extends Block {
 
 		Direction facing = state.get(FACING);
 		boolean powered = isReceivingPowerFromBack(world, pos, facing);
-		MagnetarState current = state.get(STATE);
-		if (powered && current == MagnetarState.OFF) {
-			world.setBlockState(pos, state.with(STATE, MagnetarState.POWERING_UP));
-			ModMagnetarTicker.startPoweringUp(world, pos);
-		} else if (!powered && current != MagnetarState.OFF) {
-			ModMagnetarTicker.stop(world, pos, facing);
-			world.setBlockState(pos, state.with(STATE, MagnetarState.OFF));
-			world.updateNeighborsAlways(pos, this);
+		if (powered == state.get(LIT)) {
+			return;
 		}
+
+		if (powered) {
+			world.setBlockState(pos, state.with(LIT, true));
+			ModMagnetarTicker.activate(world, pos);
+		} else {
+			ModMagnetarTicker.stop(world, pos, facing);
+			world.setBlockState(pos, state.with(LIT, false));
+		}
+		world.updateNeighborsAlways(pos, this);
 	}
 
 	@Override
@@ -107,13 +88,12 @@ public class MagnetarBlock extends Block {
 		return true;
 	}
 
-	/*Front face only. "direction" points from the block being powered
-	  back towards this one, so the neighbour sitting at our FACING side
-	  queries us with FACING.getOpposite() - same convention vanilla
-	  repeaters use.*/
+	/*"direction" points from the block being powered back towards this
+	  one, so the neighbour sitting at our FACING side queries us with
+	  FACING.getOpposite() - the same convention vanilla repeaters use.*/
 	@Override
 	public int getWeakRedstonePower(BlockState state, BlockView world, BlockPos pos, Direction direction) {
-		if (state.get(STATE) != MagnetarState.ON) {
+		if (!state.get(LIT)) {
 			return 0;
 		}
 		return direction == state.get(FACING).getOpposite() ? 15 : 0;

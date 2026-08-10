@@ -65,8 +65,7 @@ public class MagnetarBeamBlock extends Block {
 			BlockState behind = world.getBlockState(cursor);
 
 			if (behind.getBlock() instanceof MagnetarBlock) {
-				return behind.get(MagnetarBlock.STATE) == MagnetarBlock.MagnetarState.ON
-						&& behind.get(MagnetarBlock.FACING) == facing;
+				return behind.get(MagnetarBlock.LIT) && behind.get(MagnetarBlock.FACING) == facing;
 			}
 			if (behind.isAir() || behind.getBlock() instanceof MagnetarBeamBlock) {
 				continue;
