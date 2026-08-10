@@ -5,6 +5,7 @@ import net.fabricmc.fabric.api.item.v1.FabricItemSettings;
 import net.fabricmc.fabric.api.object.builder.v1.block.FabricBlockSettings;
 import net.minecraft.block.Block;
 import net.minecraft.block.Blocks;
+import net.minecraft.block.piston.PistonBehavior;
 import net.minecraft.item.BlockItem;
 import net.minecraft.registry.Registries;
 import net.minecraft.registry.Registry;
@@ -52,11 +53,24 @@ public class ModBlocks {
 	public static final Block MagnetiteOreBlock = registerBlock("magnetite_ore_block",
 			new Block(FabricBlockSettings.copyOf(Blocks.IRON_ORE)));
 
-	/*Redstone: off/powering_up/on, toggled by any redstone signal (lever,
-	  wire, etc.). See MagnetarBlock/ModMagnetarTicker for the radius
-	  wireless-power behavior.*/
+	/*Redstone: off/powering_up/on, toggled by a signal on any face except
+	  the front. Once on it emits out of the front face and projects a
+	  beam - see MagnetarBlock/MagnetarBeamBlock/ModMagnetarTicker.*/
 	public static final Block Magnetar = registerBlock("magnetar",
 			new MagnetarBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
+
+	/*Beam segment. No BlockItem - only a Magnetar creates these. Walk
+	  through, replaceable so building into the beam just shortens it, and
+	  destroyed rather than shoved when a piston hits it.*/
+	public static final Block MagnetarBeam = registerBlockWithoutItem("magnetar_beam",
+			new MagnetarBeamBlock(FabricBlockSettings.create()
+					.noCollision()
+					.replaceable()
+					.dropsNothing()
+					.nonOpaque()
+					.luminance(state -> 10)
+					.strength(-1.0f, 3600000.0f)
+					.pistonBehavior(PistonBehavior.DESTROY)));
 
 	/*Walk-through plane of a Lodestone Reach portal. No BlockItem - it's
 	  created by lighting a Magnetar frame with a Magnetized Tarch, never

@@ -2,9 +2,9 @@ package com.blockified.alariaejmc.block;
 
 import net.fabricmc.fabric.api.event.lifecycle.v1.ServerTickEvents;
 import net.minecraft.block.BlockState;
-import net.minecraft.block.RedstoneWireBlock;
 import net.minecraft.server.world.ServerWorld;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.math.Direction;
 import net.minecraft.util.math.GlobalPos;
 
 import java.util.Collections;
@@ -15,25 +15,24 @@ import java.util.Map;
 import java.util.Set;
 
 /**
- * Tracks active Magnetar blocks without needing a BlockEntity: a short
- * countdown (power-up animation) then, once ON, a periodic radius scan
- * that force-sets nearby redstone wire to full power - the "wireless"
- * part, since it ignores whether the wire is physically connected back
- * to the block. Deliberately skips the immediately-adjacent cells: wire
- * touching the Magnetar is already powered by ordinary vanilla
- * propagation (MagnetarBlock emits redstone power directly), and forcing
- * it here too would let that wire's forced power keep the Magnetar
- * "receiving power" forever, even after the original lever is flipped
- * off.
+ * Drives Magnetar blocks without needing a BlockEntity: a short power-up
+ * countdown, then upkeep of the beam projected from the block's front
+ * face while it stays ON.
+ *
+ * The beam runs in a straight line - line of sight - and stops at the
+ * first block that isn't air, so whatever it runs into is powered by the
+ * final segment sitting against it. Segments are ordinary redstone
+ * sources, so this works with every vanilla component; the old version
+ * force-wrote RedstoneWireBlock.POWER over a radius, which only ever
+ * moved wire and let that forced power travel back down the wire into
+ * the Magnetar and latch it on.
  */
 public class ModMagnetarTicker {
 	private static final int POWER_UP_TICKS = 30;
-	private static final int RADIUS = 8;
-	private static final int SCAN_INTERVAL_TICKS = 5;
+	private static final int MAX_BEAM_LENGTH = 32;
 
 	private static final Map<GlobalPos, Integer> poweringUp = new HashMap<>();
 	private static final Set<GlobalPos> active = new HashSet<>();
-	private static int scanCounter = 0;
 
 	public static void startPoweringUp(net.minecraft.world.World world, BlockPos pos) {
 		GlobalPos gp = toGlobalPos(world, pos);
@@ -42,11 +41,15 @@ public class ModMagnetarTicker {
 		}
 	}
 
-	public static void stop(net.minecraft.world.World world, BlockPos pos) {
+	public static void stop(net.minecraft.world.World world, BlockPos pos, Direction facing) {
 		GlobalPos gp = toGlobalPos(world, pos);
-		if (gp != null) {
-			poweringUp.remove(gp);
-			active.remove(gp);
+		if (gp == null) {
+			return;
+		}
+		poweringUp.remove(gp);
+		active.remove(gp);
+		if (world instanceof ServerWorld serverWorld) {
+			clearBeam(serverWorld, pos, facing);
 		}
 	}
 
@@ -63,6 +66,41 @@ public class ModMagnetarTicker {
 		return GlobalPos.create(serverWorld.getRegistryKey(), pos.toImmutable());
 	}
 
+	/**
+	 * Extends the beam forward over air, leaving anything else alone and
+	 * stopping there. Segments already in place are stepped over, so this
+	 * is safe to call every tick.
+	 */
+	private static void projectBeam(ServerWorld world, BlockPos origin, Direction facing) {
+		BlockPos.Mutable cursor = origin.mutableCopy();
+		for (int i = 0; i < MAX_BEAM_LENGTH; i++) {
+			cursor.move(facing);
+			BlockState state = world.getBlockState(cursor);
+
+			if (state.getBlock() instanceof MagnetarBeamBlock && state.get(MagnetarBeamBlock.FACING) == facing) {
+				continue;
+			}
+			if (state.isAir()) {
+				world.setBlockState(cursor, ModBlocks.MagnetarBeam.getDefaultState()
+						.with(MagnetarBeamBlock.FACING, facing), 3);
+				continue;
+			}
+			return;
+		}
+	}
+
+	private static void clearBeam(ServerWorld world, BlockPos origin, Direction facing) {
+		BlockPos.Mutable cursor = origin.mutableCopy();
+		for (int i = 0; i < MAX_BEAM_LENGTH; i++) {
+			cursor.move(facing);
+			BlockState state = world.getBlockState(cursor);
+			if (!(state.getBlock() instanceof MagnetarBeamBlock) || state.get(MagnetarBeamBlock.FACING) != facing) {
+				return;
+			}
+			world.removeBlock(cursor, false);
+		}
+	}
+
 	public static void registerTicking() {
 		ServerTickEvents.END_SERVER_TICK.register(server -> {
 			Iterator<Map.Entry<GlobalPos, Integer>> countdownIterator = poweringUp.entrySet().iterator();
@@ -77,19 +115,15 @@ public class ModMagnetarTicker {
 
 				int remaining = entry.getValue() - 1;
 				if (remaining <= 0) {
-					world.setBlockState(pos, world.getBlockState(pos).with(MagnetarBlock.STATE, MagnetarBlock.MagnetarState.ON));
+					BlockState state = world.getBlockState(pos);
+					world.setBlockState(pos, state.with(MagnetarBlock.STATE, MagnetarBlock.MagnetarState.ON));
+					world.updateNeighborsAlways(pos, state.getBlock());
 					active.add(entry.getKey());
 					countdownIterator.remove();
 				} else {
 					entry.setValue(remaining);
 				}
 			}
-
-			scanCounter++;
-			if (scanCounter < SCAN_INTERVAL_TICKS) {
-				return;
-			}
-			scanCounter = 0;
 
 			Iterator<GlobalPos> activeIterator = active.iterator();
 			while (activeIterator.hasNext()) {
@@ -108,21 +142,20 @@ public class ModMagnetarTicker {
 					continue;
 				}
 
-				for (int dx = -RADIUS; dx <= RADIUS; dx++) {
-					for (int dy = -RADIUS; dy <= RADIUS; dy++) {
-						for (int dz = -RADIUS; dz <= RADIUS; dz++) {
-							if (Math.max(Math.abs(dx), Math.max(Math.abs(dy), Math.abs(dz))) <= 1) {
-								continue;
-							}
-							BlockPos target = center.add(dx, dy, dz);
-							BlockState targetState = world.getBlockState(target);
-							if (targetState.getBlock() instanceof RedstoneWireBlock
-									&& targetState.get(RedstoneWireBlock.POWER) < 15) {
-								world.setBlockState(target, targetState.with(RedstoneWireBlock.POWER, 15), 3);
-							}
-						}
-					}
+				Direction facing = magnetarState.get(MagnetarBlock.FACING);
+
+				/*Re-check the input here as well as in neighborUpdate: a
+				  source can stop powering us without ever notifying this
+				  block, and going stale would leave the beam stuck on.*/
+				if (!MagnetarBlock.isReceivingPowerIgnoringFront(world, center, facing)) {
+					activeIterator.remove();
+					clearBeam(world, center, facing);
+					world.setBlockState(center, magnetarState.with(MagnetarBlock.STATE, MagnetarBlock.MagnetarState.OFF));
+					world.updateNeighborsAlways(center, magnetarState.getBlock());
+					continue;
 				}
+
+				projectBeam(world, center, facing);
 			}
 		});
 	}

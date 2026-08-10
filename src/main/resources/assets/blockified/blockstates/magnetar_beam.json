@@ -1,0 +1,10 @@
+{
+  "variants": {
+    "facing=up":    { "model": "blockified:block/magnetar_beam" },
+    "facing=down":  { "model": "blockified:block/magnetar_beam" },
+    "facing=north": { "model": "blockified:block/magnetar_beam", "x": 90 },
+    "facing=south": { "model": "blockified:block/magnetar_beam", "x": 90, "y": 180 },
+    "facing=east":  { "model": "blockified:block/magnetar_beam", "x": 90, "y": 90 },
+    "facing=west":  { "model": "blockified:block/magnetar_beam", "x": 90, "y": 270 }
+  }
+}
