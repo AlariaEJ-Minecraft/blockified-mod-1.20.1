@@ -2,19 +2,19 @@
   "type": "minecraft:crafting_shaped",
   "category": "misc",
   "pattern": [
-    "A",
-    "B",
-    "C"
+    "  A",
+    "BC ",
+    "AB "
   ],
   "key": {
     "A": {
       "item": "blockified:magnetite_ingot"
     },
     "B": {
-      "item": "blockified:tarched_coal"
+      "item": "blockified:tar_ingot"
     },
     "C": {
-      "item": "minecraft:stick"
+      "item": "blockified:hot_tar"
     }
   },
   "result": {
