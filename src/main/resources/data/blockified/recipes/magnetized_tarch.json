@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "pattern": [
+    "A",
+    "B",
+    "C"
+  ],
+  "key": {
+    "A": {
+      "item": "blockified:magnetite_ingot"
+    },
+    "B": {
+      "item": "blockified:tarched_coal"
+    },
+    "C": {
+      "item": "minecraft:stick"
+    }
+  },
+  "result": {
+    "item": "blockified:magnetized_tarch",
+    "count": 1
+  }
+}
