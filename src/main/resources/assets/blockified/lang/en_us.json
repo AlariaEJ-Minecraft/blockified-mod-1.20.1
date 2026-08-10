@@ -16,6 +16,7 @@
   "item.blockified.magnetite_ingot": "Magnetite Ingot",
   "item.blockified.magnetite_helmet": "Magnetite Helmet",
   "item.blockified.magnetite_compass": "Magnetite Compass",
+  "item.blockified.magnetized_tarch": "Magnetized Tarch",
 
   "block.blockified.hot_tar": "Hot Tar",
   "block.blockified.black_ice": "Black Ice",
@@ -28,6 +29,7 @@
   "block.blockified.mud_bog": "Mud Bog",
   "block.blockified.magnetite_ore_block": "Magnetite Ore",
   "block.blockified.magnetar": "Magnetar",
+  "block.blockified.lodestone_reach_portal": "Lodestone Reach Portal",
 
   "effect.blockified.phantom_protection": "Phantom Protection",
 

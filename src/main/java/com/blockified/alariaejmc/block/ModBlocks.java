@@ -58,9 +58,21 @@ public class ModBlocks {
 	public static final Block Magnetar = registerBlock("magnetar",
 			new MagnetarBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));
 
+	/*Walk-through plane of a Lodestone Reach portal. No BlockItem - it's
+	  created by lighting a Magnetar frame with a Magnetized Tarch, never
+	  placed by hand. Unbreakable strength so it survives until the frame
+	  goes.*/
+	public static final Block LodestoneReachPortal = registerBlockWithoutItem("lodestone_reach_portal",
+			new LodestoneReachPortalBlock(FabricBlockSettings.copyOf(Blocks.NETHER_PORTAL)
+					.luminance(state -> 11).strength(-1.0f, 3600000.0f)));
+
 	/*-----------*/
 	private static Block registerBlock(String name, Block block) {
 		registerBlockItem(name, block);
+		return Registry.register(Registries.BLOCK, new Identifier(Blockified.MOD_ID, name), block);
+	}
+
+	private static Block registerBlockWithoutItem(String name, Block block) {
 		return Registry.register(Registries.BLOCK, new Identifier(Blockified.MOD_ID, name), block);
 	}
 
