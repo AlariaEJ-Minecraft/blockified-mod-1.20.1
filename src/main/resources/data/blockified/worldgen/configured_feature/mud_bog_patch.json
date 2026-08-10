@@ -2,13 +2,16 @@
   "type": "minecraft:disk",
   "config": {
     "state_provider": {
-      "type": "minecraft:simple_state_provider",
-      "state": {
-        "Name": "blockified:mud_bog"
-      }
+      "fallback": {
+        "type": "minecraft:simple_state_provider",
+        "state": {
+          "Name": "blockified:mud_bog"
+        }
+      },
+      "rules": []
     },
     "target": {
-      "predicate_type": "minecraft:tag_match",
+      "type": "minecraft:matching_block_tag",
       "tag": "minecraft:dirt"
     },
     "radius": {
