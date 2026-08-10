@@ -55,9 +55,6 @@ public class ModItems {
 	public static final Item BucketOfOobleck = registerItem("bucket_of_oobleck",
 			new BucketOfOobleckItem(new FabricItemSettings().maxCount(1)));
 
-	public static final Item EmptyOobleckBucket = registerItem("empty_bucket_of_oobleck",
-			new EmptyOobleckBucketItem(new FabricItemSettings().maxCount(16)));
-
 	/*Magnetite: iron-tier armor stats. Helmet grants Phantom Protection
 	  while worn - see ModEvents for the effect upkeep/removal and the
 	  phantom-attack cancellation.*/

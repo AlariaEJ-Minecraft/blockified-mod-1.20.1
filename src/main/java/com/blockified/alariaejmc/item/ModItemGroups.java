@@ -31,7 +31,6 @@ public class ModItemGroups {
 						entries.add(ModBlocks.HardDenseIce);
 						entries.add(ModBlocks.Oobleck);
 						entries.add(ModItems.BucketOfOobleck);
-						entries.add(ModItems.EmptyOobleckBucket);
 						entries.add(ModBlocks.ClayBog);
 						entries.add(ModBlocks.BogBlock);
 						entries.add(ModBlocks.MudBog);

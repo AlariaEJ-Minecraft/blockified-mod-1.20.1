@@ -5,6 +5,7 @@ import net.minecraft.entity.player.PlayerEntity;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraft.item.ItemUsageContext;
+import net.minecraft.item.Items;
 import net.minecraft.sound.SoundCategory;
 import net.minecraft.sound.SoundEvents;
 import net.minecraft.util.ActionResult;
@@ -13,7 +14,10 @@ import net.minecraft.world.World;
 
 /**
  * Places a full-depth (LEVEL 6) Oobleck block, Powder-Snow-bucket style
- * (no fluid physics). See OobleckBlock for the quicksand behavior.
+ * (no fluid physics), and hands back a plain vanilla bucket just like
+ * any other filled bucket does. Scooping Oobleck back up with an empty
+ * bucket is handled in ModEvents. See OobleckBlock for the quicksand
+ * behavior.
  */
 public class BucketOfOobleckItem extends Item {
 	public BucketOfOobleckItem(Settings settings) {
@@ -38,7 +42,7 @@ public class BucketOfOobleckItem extends Item {
 			if (player != null && !player.getAbilities().creativeMode) {
 				ItemStack stack = context.getStack();
 				stack.decrement(1);
-				ItemStack emptyBucket = new ItemStack(ModItems.EmptyOobleckBucket);
+				ItemStack emptyBucket = new ItemStack(Items.BUCKET);
 				if (stack.isEmpty()) {
 					player.setStackInHand(context.getHand(), emptyBucket);
 				} else if (!player.giveItemStack(emptyBucket)) {

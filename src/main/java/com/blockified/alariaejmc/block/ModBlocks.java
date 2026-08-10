@@ -13,23 +13,29 @@ import net.minecraft.sound.BlockSoundGroup;
 import net.minecraft.util.Identifier;
 
 public class ModBlocks {
+	/*Burns and ignites anything standing on it - see HotTarBlock.*/
 	public static final Block HotTar = registerBlock("hot_tar",
-			new Block(FabricBlockSettings.copyOf(Blocks.MAGMA_BLOCK).sounds(BlockSoundGroup.BASALT)
+			new HotTarBlock(FabricBlockSettings.copyOf(Blocks.MAGMA_BLOCK).sounds(BlockSoundGroup.BASALT)
 					.resistance(40.5f)));
 
 	/*Ice variants: slipperiness and standstill push both rank
-	  Hard Dense Ice > Cold Ice > Condensed Ice > Black Ice*/
+	  Hard Dense Ice > Cold Ice > Condensed Ice > Black Ice. All four carry
+	  bedrock-tier blast resistance so no explosion can break them.*/
 	public static final Block BlackIce = registerBlock("black_ice",
-			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE).slipperiness(0.96f), 0.0));
+			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE)
+					.slipperiness(0.96f).resistance(3600000.0f), 0.0));
 
 	public static final Block CondensedIce = registerBlock("condensed_ice",
-			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE).slipperiness(0.975f), 0.008));
+			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE)
+					.slipperiness(0.975f).resistance(3600000.0f), 0.008));
 
 	public static final Block ColdIce = registerBlock("cold_ice",
-			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE).slipperiness(0.985f), 0.016));
+			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE)
+					.slipperiness(0.985f).resistance(3600000.0f), 0.016));
 
 	public static final Block HardDenseIce = registerBlock("hard_dense_ice",
-			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE).slipperiness(0.994f), 0.028));
+			new PushingIceBlock(FabricBlockSettings.copyOf(Blocks.PACKED_ICE)
+					.slipperiness(0.994f).resistance(3600000.0f), 0.028));
 
 	/*Placed/picked up via bucket (always LEVEL 6); also generates as
 	  variable-depth (LEVEL 1-6) desert riverbank strips - see
