@@ -59,8 +59,8 @@ public class ModBlocks {
 	public static final Block MagnetiteOreBlock = registerBlock("magnetite_ore_block",
 			new Block(FabricBlockSettings.copyOf(Blocks.IRON_ORE)));
 
-	/*Redstone: polarised like an observer - powered from the back, emits
-	  and projects its beam out of the front, sides inert. See
+	/*Redstone: takes signal on any of its five non-front faces and emits
+	  from the front alone, which also projects the wireless link. See
 	  MagnetarBlock/MagnetarBeamBlock/ModMagnetarTicker.*/
 	public static final Block Magnetar = registerBlock("magnetar",
 			new MagnetarBlock(FabricBlockSettings.copyOf(Blocks.REDSTONE_BLOCK)));

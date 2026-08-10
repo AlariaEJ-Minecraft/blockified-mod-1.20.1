@@ -16,20 +16,16 @@ import net.minecraft.world.World;
  * A plain lit/unlit redstone component, switching the moment its input
  * changes the way a Redstone Lamp does - no wind-up, no cooldown.
  *
- * Faces split three and three. Back, left and right take signal in, and
- * any one of them is enough on its own - they are OR'd, so nothing here
- * depends on the back being wired. Front, top and bottom put signal out,
- * which is what lets a redstone torch attached to those faces switch off,
- * and the front additionally projects the invisible wireless link that
- * ModMagnetarTicker maintains.
+ * Five faces in, one out. Back, left, right, top and bottom all take
+ * signal, and any one of them is enough on its own - they are OR'd, so
+ * nothing depends on a particular face being wired. The front is the sole
+ * output: it emits, it switches off a redstone torch attached to it, and
+ * it projects the invisible wireless link that ModMagnetarTicker
+ * maintains.
  *
- * A face is never both, and that is what keeps the block switchable: an
- * input face that also emitted would feed this block's own signal back
- * into its trigger and latch it on for good. The link's node sits against
- * the front, an output face, for the same reason.
- *
- * Aimed straight up or down there is no meaningful left or right, so all
- * four horizontal faces take input instead and only the front emits.
+ * No face is ever both, and that is what keeps the block switchable - see
+ * isInputFace. The link's node sits against the front for the same
+ * reason.
  */
 public class MagnetarBlock extends Block {
 	public static final BooleanProperty LIT = Properties.LIT;
@@ -51,21 +47,15 @@ public class MagnetarBlock extends Block {
 	}
 
 	/**
-	 * Back, left and right are inputs; front, top and bottom are outputs.
-	 * When the block points up or down, left and right are meaningless, so
-	 * every horizontal face becomes an input and only the front emits.
+	 * Every face except the front takes input; the front alone emits.
+	 *
+	 * The split has to be clean like this. A face that both emitted and
+	 * read would drive 15 into whatever is attached, read that straight
+	 * back as its own input, and stay lit forever with the real signal cut
+	 * - the latch that made this block impossible to switch off before.
 	 */
 	public static boolean isInputFace(Direction facing, Direction face) {
-		if (face == facing) {
-			return false;
-		}
-		if (face == facing.getOpposite()) {
-			return true;
-		}
-		if (facing.getAxis().isVertical()) {
-			return true;
-		}
-		return face.getAxis().isHorizontal();
+		return face != facing;
 	}
 
 	/**
