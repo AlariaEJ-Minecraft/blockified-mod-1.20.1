@@ -14,17 +14,18 @@ import net.minecraft.world.BlockView;
 import net.minecraft.world.World;
 
 /**
- * Off/powering-up/on, toggled by any redstone signal arriving on one of
- * its five non-front faces. Once ON it behaves as an ordinary redstone
- * source out of its front face only, and ModMagnetarTicker projects a
- * beam of MagnetarBeamBlock straight ahead until the beam hits something.
- * Those beam blocks are themselves real redstone sources, which is what
- * makes the whole thing work with every vanilla component rather than
- * just wire.
+ * Polarised like an observer: signal goes in the back, output comes out
+ * the front, and the four side faces do nothing at all. Feeding the
+ * front is ignored by design - the first beam segment sits against it,
+ * so treating it as input would latch the block on forever and it could
+ * never be switched off.
  *
- * The front face is excluded from the input check on purpose: the first
- * beam block sits directly against it, so counting it as input would
- * latch the block on forever and it could never be switched off.
+ * Off/powering-up/on is driven by whatever powers the back face. Once ON
+ * it acts as an ordinary redstone source out of the front, and
+ * ModMagnetarTicker projects a beam of MagnetarBeamBlock straight ahead
+ * until it hits something. Those segments are themselves real redstone
+ * sources, which is what makes this work with every vanilla component
+ * rather than only wire.
  */
 public class MagnetarBlock extends Block {
 	public enum MagnetarState implements StringIdentifiable {
@@ -63,20 +64,13 @@ public class MagnetarBlock extends Block {
 	}
 
 	/**
-	 * Mirrors World#isReceivingRedstonePower but skips the front face.
-	 * Same neighbour/direction pairing vanilla uses: for the neighbour at
-	 * pos.offset(d), query it with d.
+	 * Reads the back face only - the face opposite the front. Uses the
+	 * same neighbour/direction pairing as World#isReceivingRedstonePower:
+	 * for the neighbour at pos.offset(d), query it with d.
 	 */
-	public static boolean isReceivingPowerIgnoringFront(World world, BlockPos pos, Direction front) {
-		for (Direction direction : Direction.values()) {
-			if (direction == front) {
-				continue;
-			}
-			if (world.getEmittedRedstonePower(pos.offset(direction), direction) > 0) {
-				return true;
-			}
-		}
-		return false;
+	public static boolean isReceivingPowerFromBack(World world, BlockPos pos, Direction front) {
+		Direction back = front.getOpposite();
+		return world.getEmittedRedstonePower(pos.offset(back), back) > 0;
 	}
 
 	@Override
@@ -87,7 +81,7 @@ public class MagnetarBlock extends Block {
 		}
 
 		Direction facing = state.get(FACING);
-		boolean powered = isReceivingPowerIgnoringFront(world, pos, facing);
+		boolean powered = isReceivingPowerFromBack(world, pos, facing);
 		MagnetarState current = state.get(STATE);
 		if (powered && current == MagnetarState.OFF) {
 			world.setBlockState(pos, state.with(STATE, MagnetarState.POWERING_UP));

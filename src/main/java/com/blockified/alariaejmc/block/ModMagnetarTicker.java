@@ -144,10 +144,10 @@ public class ModMagnetarTicker {
 
 				Direction facing = magnetarState.get(MagnetarBlock.FACING);
 
-				/*Re-check the input here as well as in neighborUpdate: a
-				  source can stop powering us without ever notifying this
+				/*Re-check the back face here as well as in neighborUpdate:
+				  a source can stop powering us without ever notifying this
 				  block, and going stale would leave the beam stuck on.*/
-				if (!MagnetarBlock.isReceivingPowerIgnoringFront(world, center, facing)) {
+				if (!MagnetarBlock.isReceivingPowerFromBack(world, center, facing)) {
 					activeIterator.remove();
 					clearBeam(world, center, facing);
 					world.setBlockState(center, magnetarState.with(MagnetarBlock.STATE, MagnetarBlock.MagnetarState.OFF));
