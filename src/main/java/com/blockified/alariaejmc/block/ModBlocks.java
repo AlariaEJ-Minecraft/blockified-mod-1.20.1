@@ -79,13 +79,6 @@ public class ModBlocks {
 					.strength(-1.0f, 3600000.0f)
 					.pistonBehavior(PistonBehavior.DESTROY)));
 
-	/*Walk-through plane of a Lodestone Reach portal. No BlockItem - it's
-	  created by lighting a Magnetar frame with a Magnetized Tarch, never
-	  placed by hand. Unbreakable strength so it survives until the frame
-	  goes.*/
-	public static final Block LodestoneReachPortal = registerBlockWithoutItem("lodestone_reach_portal",
-			new LodestoneReachPortalBlock(FabricBlockSettings.copyOf(Blocks.NETHER_PORTAL)
-					.luminance(state -> 11).strength(-1.0f, 3600000.0f)));
 
 	/*-----------*/
 	private static Block registerBlock(String name, Block block) {

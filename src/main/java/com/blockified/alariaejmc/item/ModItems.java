@@ -74,11 +74,6 @@ public class ModItems {
 	public static final Item MagnetiteCompass = registerItem("magnetite_compass",
 			new CompassItem(new FabricItemSettings()));
 
-	/*Lights a Lodestone Reach portal on a flat 4x4 Magnetar frame.
-	  Durability picked to match flint and steel's role as a reusable-but-
-	  finite igniter; no recipe yet.*/
-	public static final Item MagnetizedTarch = registerItem("magnetized_tarch",
-			new MagnetizedTarchItem(new FabricItemSettings().maxCount(1).maxDamage(16)));
 
 	/**//**//**//**//**/
 	private static Item registerItem(String name, Item item) {
